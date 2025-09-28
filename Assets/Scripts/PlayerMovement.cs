@@ -10,8 +10,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float playerSpeed = 10f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Rigidbody playerRB;
-    [SerializeField, Range(-90, 90)] private float minCamLimit = -60f;
-    [SerializeField, Range(-90, 90)] private float maxCamLimit = 60f;
 
     [Header("TPS References")]
     [SerializeField] private Transform orientation;
