@@ -21,8 +21,6 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [Header("Interact")]
     [SerializeField, Range(0f, 100f)] private float camRange = 20f;
-
-
     void Update()
     {
         ApplyGravity();
@@ -76,6 +74,7 @@ public class ThirdPersonController : MonoBehaviour
         Debug.DrawRay(cam.position, cam.forward * camRange, Color.red);
         if (Input.GetAxisRaw("Interact") > 0)
         {
+            
             RaycastHit hit;
             if (Physics.Raycast(cam.position, cam.forward, out hit, camRange))
             {
