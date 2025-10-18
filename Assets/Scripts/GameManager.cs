@@ -24,17 +24,19 @@ public class GameManager : MonoBehaviour
 
     private GameObject player;
     private GameObject freeLookCamera;
-    //public static GameManager instance;
     public EGameState gameState;
+
     void Start()
     {
         /*Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;*/
         SetGameState(EGameState.MAINMENU);
-        player = GameObject.Find("Third_Person_Player");
         freeLookCamera = GameObject.Find("FreeLook Camera");
+        
+        ActiveControl(false);
+        /*player = GameObject.Find("Third_Person_Player");
         player.GetComponent<ThirdPersonController>().enabled = false;
-        freeLookCamera.GetComponent<Cinemachine.CinemachineFreeLook>().enabled = false;
+        ThirdPersonController.instance.playerInputActions.Player.Disable();*/
 
     }
 
@@ -90,8 +92,28 @@ public class GameManager : MonoBehaviour
                     Debug.Log("Spawn Default Character");
                     break;*/
         }
-        player.GetComponent<ThirdPersonController>().enabled = true;
+        ActiveControl(true);
+        /*player.GetComponent<ThirdPersonController>().enabled = true;
         freeLookCamera.GetComponent<Cinemachine.CinemachineFreeLook>().enabled = true;
+        ThirdPersonController.instance.playerInputActions.Player.Enable();*/
 
+    }
+
+    public void ActiveControl(bool isActive)
+    {
+        if (isActive)
+        {
+            freeLookCamera.GetComponent<Cinemachine.CinemachineFreeLook>().enabled = true;
+            ThirdPersonController.instance.playerInputActions.Player.Enable();
+        }
+        else
+        {
+            freeLookCamera.GetComponent<Cinemachine.CinemachineFreeLook>().enabled = false;
+            ThirdPersonController.instance.playerInputActions.Player.Disable();
+        }
+    }
+    void OnDisable()
+    {
+        ThirdPersonController.instance.playerInputActions.Player.Disable();
     }
 }

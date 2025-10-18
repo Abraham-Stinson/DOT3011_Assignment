@@ -1085,8 +1085,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   camRange: 20
-  inHandObject: {fileID: 0}
-  inHandObjectParent: {fileID: 0}
 --- !u!1 &9080238293738740698
 GameObject:
   m_ObjectHideFlags: 0

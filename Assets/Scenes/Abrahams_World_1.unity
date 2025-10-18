@@ -2368,15 +2368,12 @@ MonoBehaviour:
   - characterType: 0
     characterName: Ali
     characterPrefab: {fileID: 0}
-    weaponIcon: {fileID: 0}
   - characterType: 1
     characterName: Elif
     characterPrefab: {fileID: 0}
-    weaponIcon: {fileID: 0}
   - characterType: 2
     characterName: Deniz
     characterPrefab: {fileID: 0}
-    weaponIcon: {fileID: 0}
   gameState: 0
 --- !u!1 &1553813997
 GameObject:
@@ -2939,26 +2936,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4393179789149819191, guid: f020336816c94d54a877d4e511dc439d,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.99855644
-      objectReference: {fileID: 0}
-    - target: {fileID: 4393179789149819191, guid: f020336816c94d54a877d4e511dc439d,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.053712968
-      objectReference: {fileID: 0}
-    - target: {fileID: 4393179789149819191, guid: f020336816c94d54a877d4e511dc439d,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4393179789149819191, guid: f020336816c94d54a877d4e511dc439d,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5272704231347641088, guid: f020336816c94d54a877d4e511dc439d,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -2968,26 +2945,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.x
       value: 0.13505943
-      objectReference: {fileID: 0}
-    - target: {fileID: 6646142354433909570, guid: f020336816c94d54a877d4e511dc439d,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9969601
-      objectReference: {fileID: 0}
-    - target: {fileID: 6646142354433909570, guid: f020336816c94d54a877d4e511dc439d,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.077913925
-      objectReference: {fileID: 0}
-    - target: {fileID: 6646142354433909570, guid: f020336816c94d54a877d4e511dc439d,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6646142354433909570, guid: f020336816c94d54a877d4e511dc439d,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7481641408146313823, guid: f020336816c94d54a877d4e511dc439d,
         type: 3}
