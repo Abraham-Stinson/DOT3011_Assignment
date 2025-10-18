@@ -2364,6 +2364,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0d57242cbee38047a53931830453dfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characters:
+  - characterType: 0
+    characterName: Ali
+    characterPrefab: {fileID: 0}
+    weaponIcon: {fileID: 0}
+  - characterType: 1
+    characterName: Elif
+    characterPrefab: {fileID: 0}
+    weaponIcon: {fileID: 0}
+  - characterType: 2
+    characterName: Deniz
+    characterPrefab: {fileID: 0}
+    weaponIcon: {fileID: 0}
   gameState: 0
 --- !u!1 &1553813997
 GameObject:

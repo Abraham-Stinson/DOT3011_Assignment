@@ -5,6 +5,23 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public enum CharacterType
+    {
+        WARRIOR,//jop male
+        MAGE,//electro shock female
+        RANGER//flashlight non selected
+    }
+    [System.Serializable]
+    public class CharacterData
+    {
+        public CharacterType characterType;
+        public string characterName;
+        public GameObject characterPrefab;
+        //public Sprite weaponIcon;
+    }
+
+    [SerializeField] private CharacterData[] characters = new CharacterData[3];
+
     private GameObject player;
     private GameObject freeLookCamera;
     //public static GameManager instance;
@@ -18,11 +35,13 @@ public class GameManager : MonoBehaviour
         freeLookCamera = GameObject.Find("FreeLook Camera");
         player.GetComponent<ThirdPersonController>().enabled = false;
         freeLookCamera.GetComponent<Cinemachine.CinemachineFreeLook>().enabled = false;
-        
+
     }
+
+
     void Update()
     {
-        
+
     }
 
     public void SetGameState(EGameState gameState)
@@ -46,36 +65,33 @@ public class GameManager : MonoBehaviour
     }
     public void InGame(int selectedCharacterIndex)
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         SetGameState(EGameState.INGAME);
         SpawnChrahterAtIndex(selectedCharacterIndex);
     }
 
-    enum PlayerType
-    {
-        WARRIOR,//jop male
-        MAGE,//electro shock female
-        RANGER//flashlight non selected
-    }
+
     public void SpawnChrahterAtIndex(int index)
     {
         //TO DO: SPAWN CHARACTER AT INDEX
         switch (index)
         {
-            case (int)PlayerType.WARRIOR:
+            case (int)CharacterType.WARRIOR:
                 Debug.Log("Spawn Warrior");
                 break;
-            case (int)PlayerType.MAGE:
+            case (int)CharacterType.MAGE:
                 Debug.Log("Spawn Mage");
                 break;
-            case (int)PlayerType.RANGER:
+            case (int)CharacterType.RANGER:
                 Debug.Log("Spawn Ranger");
                 break;
-            default:
-                Debug.Log("Spawn Default Character");
-                break;
+                /*default:
+                    Debug.Log("Spawn Default Character");
+                    break;*/
         }
         player.GetComponent<ThirdPersonController>().enabled = true;
         freeLookCamera.GetComponent<Cinemachine.CinemachineFreeLook>().enabled = true;
-        
+
     }
 }
