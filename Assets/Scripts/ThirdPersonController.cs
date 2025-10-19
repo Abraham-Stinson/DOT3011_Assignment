@@ -36,6 +36,7 @@ public class ThirdPersonController : MonoBehaviour
 
         playerInputActions.Player.Jump.performed += JumpHandle;
         playerInputActions.Player.Interact.performed += InteractHandle;
+        playerInputActions.Player.MenuTrigger.performed += MenuToggle;
         //playerInputActions.Player.Movement.performed += MovementHandle_performed;
 
         instance = this;
@@ -134,4 +135,9 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
     #endregion
+    public void MenuToggle(InputAction.CallbackContext context)
+    {
+        Debug.Log("Menu Toggle Triggered");
+        UIManager.instance.PauseMenuToggle();
+    }
 }

@@ -32,6 +32,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MenuTrigger",
+                    "type": "Button",
+                    "id": "4c983a91-665e-455d-8398-03d8d9c4f426",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -103,17 +112,6 @@
                 },
                 {
                     "name": "",
-                    "id": "dc54dd9b-f67d-47cb-b997-de47901c7c04",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "82ff73f3-4e24-45dc-b757-d7c54a2c65df",
                     "path": "<Keyboard>/e",
                     "interactions": "",
@@ -125,12 +123,12 @@
                 },
                 {
                     "name": "",
-                    "id": "cb03d155-a607-4e4a-8ad3-7730004edc54",
-                    "path": "<Gamepad>/buttonWest",
+                    "id": "b7204489-b1a4-436b-b74b-7d981f121baa",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Interact",
+                    "action": "MenuTrigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

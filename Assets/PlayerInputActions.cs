@@ -118,6 +118,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MenuTrigger"",
+                    ""type"": ""Button"",
+                    ""id"": ""4c983a91-665e-455d-8398-03d8d9c4f426"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -189,17 +198,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""dc54dd9b-f67d-47cb-b997-de47901c7c04"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""82ff73f3-4e24-45dc-b757-d7c54a2c65df"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
@@ -211,12 +209,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""cb03d155-a607-4e4a-8ad3-7730004edc54"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""id"": ""b7204489-b1a4-436b-b74b-7d981f121baa"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Interact"",
+                    ""action"": ""MenuTrigger"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -230,6 +228,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_MenuTrigger = m_Player.FindAction("MenuTrigger", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -313,6 +312,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_MenuTrigger;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -336,6 +336,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Interact".
         /// </summary>
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/MenuTrigger".
+        /// </summary>
+        public InputAction @MenuTrigger => m_Wrapper.m_Player_MenuTrigger;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -371,6 +375,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @MenuTrigger.started += instance.OnMenuTrigger;
+            @MenuTrigger.performed += instance.OnMenuTrigger;
+            @MenuTrigger.canceled += instance.OnMenuTrigger;
         }
 
         /// <summary>
@@ -391,6 +398,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @MenuTrigger.started -= instance.OnMenuTrigger;
+            @MenuTrigger.performed -= instance.OnMenuTrigger;
+            @MenuTrigger.canceled -= instance.OnMenuTrigger;
         }
 
         /// <summary>
@@ -452,5 +462,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteract(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MenuTrigger" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMenuTrigger(InputAction.CallbackContext context);
     }
 }

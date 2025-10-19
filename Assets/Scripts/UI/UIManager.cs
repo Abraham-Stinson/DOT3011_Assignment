@@ -1,23 +1,48 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour,IGameStateListener
+public class UIManager : MonoBehaviour, IGameStateListener
 {
-    [Header("Panels")] 
-    [SerializeField] private GameObject menuPanel;
-    [SerializeField] private GameObject gameIntro;
-    [SerializeField] private GameObject characterSelectionPanel;
-    [SerializeField] private GameObject inGamePanel;
-    [SerializeField] private GameObject pausePanel;
-    [SerializeField] private GameObject gameOverPanel;
-    
+  public static UIManager instance { get; private set; }
+  [Header("Panels")]
+  [SerializeField] private GameObject menuPanel;
+  [SerializeField] private GameObject gameIntro;
+  [SerializeField] private GameObject characterSelectionPanel;
+  [SerializeField] private GameObject inGamePanel;
+  [SerializeField] private GameObject pausePanel;
+  [SerializeField] private GameObject gameOverPanel;
 
+  void Awake()
+  {
+    instance = this;
+  }
   public void GameStateChangedCallBack(EGameState gameState)
   {
     menuPanel.SetActive(gameState == EGameState.MAINMENU);
     //gameIntro.SetActive(gameState == EGameState.GAMEINTRO);
     characterSelectionPanel.SetActive(gameState == EGameState.CHRACTERSELECTION);
-    /*inGamePanel.SetActive(gameState == EGameState.INGAME);
+    inGamePanel.SetActive(gameState == EGameState.INGAME);
     pausePanel.SetActive(gameState == EGameState.PAUSE);
-    gameOverPanel.SetActive(gameState == EGameState.GAMEOVER);*/
+    /*gameOverPanel.SetActive(gameState == EGameState.GAMEOVER);*/
+  }
+  private bool isGamePaused = false;
+  public void PauseMenuToggle()
+  {
+    isGamePaused = !isGamePaused;
+    if (isGamePaused)
+    {
+      GameManager.instance.SetGameState(EGameState.PAUSE);
+      Time.timeScale = 0f;
+      Cursor.lockState = CursorLockMode.None;
+      Cursor.visible = true;
+    }
+    else
+    {
+      GameManager.instance.SetGameState(EGameState.INGAME);
+      Time.timeScale = 1f;
+      Cursor.lockState = CursorLockMode.Locked;
+      Cursor.visible = false;
+    }
+
   }
 }

@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance { get; private set; }
     public enum CharacterType
     {
         WARRIOR,//jop male
@@ -26,13 +28,18 @@ public class GameManager : MonoBehaviour
     private GameObject freeLookCamera;
     public EGameState gameState;
 
+    [SerializeField] public Transform spawnObjectParent;
+    void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         /*Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;*/
         SetGameState(EGameState.MAINMENU);
         freeLookCamera = GameObject.Find("FreeLook Camera");
-        
+
         ActiveControl(false);
         /*player = GameObject.Find("Third_Person_Player");
         player.GetComponent<ThirdPersonController>().enabled = false;
@@ -61,12 +68,21 @@ public class GameManager : MonoBehaviour
     {
         SetGameState(EGameState.GAMEINTRO);
     }*/
+
+    public void ToMainMenu()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        RemoveCurrentPlayer();
+        SetGameState(EGameState.MAINMENU);
+    }
     public void CharacterSelection()
     {
         SetGameState(EGameState.CHRACTERSELECTION);
     }
     public void InGame(int selectedCharacterIndex)
     {
+        Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         SetGameState(EGameState.INGAME);
@@ -76,22 +92,11 @@ public class GameManager : MonoBehaviour
 
     public void SpawnChrahterAtIndex(int index)
     {
-        //TO DO: SPAWN CHARACTER AT INDEX
-        switch (index)
-        {
-            case (int)CharacterType.WARRIOR:
-                Debug.Log("Spawn Warrior");
-                break;
-            case (int)CharacterType.MAGE:
-                Debug.Log("Spawn Mage");
-                break;
-            case (int)CharacterType.RANGER:
-                Debug.Log("Spawn Ranger");
-                break;
-                /*default:
-                    Debug.Log("Spawn Default Character");
-                    break;*/
-        }
+        Debug.Log(characters[index].characterName + " spawned");
+        player = Instantiate(characters[index].characterPrefab, spawnObjectParent.position, spawnObjectParent.rotation, spawnObjectParent.transform);
+        
+        GameObject heroNameUI = GameObject.Find("HeroName");
+        heroNameUI.GetComponent<TextMeshProUGUI>().text = characters[index].characterName;
         ActiveControl(true);
         /*player.GetComponent<ThirdPersonController>().enabled = true;
         freeLookCamera.GetComponent<Cinemachine.CinemachineFreeLook>().enabled = true;
@@ -115,5 +120,13 @@ public class GameManager : MonoBehaviour
     void OnDisable()
     {
         ThirdPersonController.instance.playerInputActions.Player.Disable();
+    }
+
+    void RemoveCurrentPlayer()
+    {
+        if (player != null)
+        {
+            Destroy(player);
+        }
     }
 }
