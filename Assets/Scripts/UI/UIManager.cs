@@ -29,14 +29,14 @@ public class UIManager : MonoBehaviour, IGameStateListener
   public void PauseMenuToggle()
   {
     isGamePaused = !isGamePaused;
-    if (isGamePaused)
+    if (isGamePaused && GameManager.instance.gameState == EGameState.INGAME)
     {
       GameManager.instance.SetGameState(EGameState.PAUSE);
       Time.timeScale = 0f;
       Cursor.lockState = CursorLockMode.None;
       Cursor.visible = true;
     }
-    else
+    else if (!isGamePaused && GameManager.instance.gameState == EGameState.PAUSE)
     {
       GameManager.instance.SetGameState(EGameState.INGAME);
       Time.timeScale = 1f;

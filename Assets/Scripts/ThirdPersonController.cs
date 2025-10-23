@@ -16,7 +16,7 @@ public class ThirdPersonController : MonoBehaviour
     [Header("Movement and TPS Camera")]
     [SerializeField] private CharacterController chrachterController;
     [SerializeField, Range(0f, 100f)] private float speed = 10f;
-    [SerializeField, Range(0f, 10f)] private float rotationSmoothTime = 0.1f;
+    [SerializeField, Range(0f, 1f)] private float rotationSmoothTime = 0.5f;
     private float rotationVelocity;
     [SerializeField] Transform cam;
 
