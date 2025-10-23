@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
+using UnityEngine.InputSystem;
 
 public class ThirdPersonController : MonoBehaviour
 {
@@ -88,4 +85,31 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
     #endregion
+
+    public void Fire(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            IWeapon onHand=GetComponentInChildren<IWeapon>();
+
+            if (onHand != null)
+            {
+                Debug.Log("Weapon Fired!");
+                onHand.Fire();
+            }
+        }
+    }
+    public void SwitchStance(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            IWeapon onHand = GetComponentInChildren<IWeapon>();
+
+            if (onHand != null)
+            {
+                Debug.Log("Weapon Stance Switched");
+                onHand.SwitchStance();
+            }
+        }
+    }
 }
