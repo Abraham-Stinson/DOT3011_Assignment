@@ -4,6 +4,6 @@ using UnityEngine;
 
 interface IWeapon
 {
-    void Fire();
-    void SwitchStance();
+    void MainAttack();
+    void SecondaryAttack();
 }
