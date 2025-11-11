@@ -140,4 +140,31 @@ public class ThirdPersonController : MonoBehaviour
         Debug.Log("Menu Toggle Triggered");
         UIManager.instance.PauseMenuToggle();
     }
+
+    public void MainAttack(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            IWeapon onHand = GetComponentInChildren<IWeapon>();
+
+            if (onHand != null)
+            {
+                Debug.Log("Weapon Fired!");
+                onHand.MainAttack();
+            }
+        }
+    }
+    public void SecondaryAttack(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            IWeapon onHand = GetComponentInChildren<IWeapon>();
+
+            if (onHand != null)
+            {
+                Debug.Log("Weapon Stance Switched");
+                onHand.SecondaryAttack();
+            }
+        }
+    }
 }

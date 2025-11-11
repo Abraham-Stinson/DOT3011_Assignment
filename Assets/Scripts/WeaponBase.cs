@@ -4,6 +4,6 @@ using UnityEngine;
 
 public abstract class WeaponBase : MonoBehaviour, IWeapon
 {
-    public abstract void Fire();
-    public abstract void SwitchStance();
+    public abstract void MainAttack();
+    public abstract void SecondaryAttack();
 }
