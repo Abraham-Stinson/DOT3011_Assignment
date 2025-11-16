@@ -14,19 +14,24 @@ public class ThirdPersonController : MonoBehaviour
     public static ThirdPersonController instance { get; private set; }
     //private PlayerInput playerInput;
     [Header("Movement and TPS Camera")]
-    [SerializeField] private CharacterController chrachterController;
+    [SerializeField] private CharacterController characterController;
     [SerializeField, Range(0f, 100f)] private float speed = 10f;
     [SerializeField, Range(0f, 1f)] private float rotationSmoothTime = 0.5f;
     private float rotationVelocity;
     [SerializeField] Transform cam;
 
     [Header("Jump and Gravity")]
-    [SerializeField, Range(0f, 100f)] private float gravity = -9.81f;
+    [SerializeField, Range(-100f, 100f)] private float gravity = -9.81f;
     [SerializeField, Range(0f, 50f)] private float jumpForce = 5f;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField, Range(1f, 2f)] private float groundRange;
     [Header("Interact")]
     [SerializeField, Range(0f, 100f)] private float camRange = 20f;
     public PlayerInputActions playerInputActions;
+
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
+    public bool isAttacking;
     void Awake()
     {
         //playerInput = GetComponent<PlayerInput>();
@@ -37,6 +42,8 @@ public class ThirdPersonController : MonoBehaviour
         playerInputActions.Player.Jump.performed += JumpHandle;
         playerInputActions.Player.Interact.performed += InteractHandle;
         playerInputActions.Player.MenuTrigger.performed += MenuToggle;
+        playerInputActions.Player.MainAttack.performed += MainAttack;
+        playerInputActions.Player.SecondaryAttack.performed += SecondaryAttack;
         //playerInputActions.Player.Movement.performed += MovementHandle_performed;
 
         instance = this;
@@ -62,6 +69,7 @@ public class ThirdPersonController : MonoBehaviour
     #region Movement and TPS Camera
     void MovementHandle()
     {
+        if (isAttacking) return;
         /*float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");*/
 
@@ -73,12 +81,21 @@ public class ThirdPersonController : MonoBehaviour
 
         if (direction.magnitude >= 0.1f)
         {
+            animator.SetBool("isMoving", true);
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
             float angel = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref rotationVelocity, rotationSmoothTime);
             transform.rotation = Quaternion.Euler(0f, angel, 0f);
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            chrachterController.Move(moveDir.normalized * speed * Time.deltaTime);
+            characterController.Move(moveDir.normalized * speed * Time.deltaTime);
+        }
+        else
+        {
+            if (animator != null)
+            {
+                animator.SetBool("isMoving", false);
+            }
+
         }
     }
     #endregion
@@ -86,19 +103,27 @@ public class ThirdPersonController : MonoBehaviour
     public void JumpHandle(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
-        if (Physics.Raycast(transform.position, Vector3.down, 1.1f, LayerMask.GetMask("Ground")))
+        if (isAttacking) return;
+        
+        if (isPlayerOnGround())
         {
             gravity = jumpForce;
-            chrachterController.Move(new Vector3(0, gravity, 0) * Time.deltaTime);
+            characterController.Move(new Vector3(0, gravity, 0) * Time.deltaTime);
+            animator.SetBool("isJumping", true);
         }
 
         //Debug.DrawRay(transform.position, Vector3.down * 1.1f, Color.red); DEBUG RAY
         /*if (Input.GetButtonDown("Jump") && Physics.Raycast(transform.position, Vector3.down, 1.1f, LayerMask.GetMask("Ground")))
         {
             gravity = jumpForce;
-            chrachterController.Move(new Vector3(0, gravity, 0) * Time.deltaTime);
+            characterController.Move(new Vector3(0, gravity, 0) * Time.deltaTime);
 
         }*/
+    }
+
+    bool isPlayerOnGround()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, groundRange, LayerMask.GetMask("Ground"));
     }
 
     /*private JumpPerformed JumpPerformed(InputAction.CallbackContext context)
@@ -109,12 +134,37 @@ public class ThirdPersonController : MonoBehaviour
     #region Gravity
     void ApplyGravity()
     {
-        if (chrachterController.isGrounded && gravity < 0)
+
+        if (isPlayerOnGround() && gravity < 0)
         {
             gravity = -2f;
+            if (isPlayerOnGround())
+            {
+                if (animator != null)
+                {
+                    animator.SetBool("isFalling", false);
+                    animator.SetBool("isJumping", false);
+                }
+
+            }
+
+        }
+        else
+        {
+
+            if (gravity < 0 && !isPlayerOnGround())
+            {
+                if (animator != null)
+                {
+                    animator.SetBool("isJumping", false);
+                    animator.SetBool("isFalling", true);
+                }
+
+            }
         }
         gravity += -9.81f * Time.deltaTime;
-        chrachterController.Move(new Vector3(0, gravity, 0) * Time.deltaTime);
+
+        characterController.Move(new Vector3(0, gravity, 0) * Time.deltaTime);
     }
     #endregion
 
@@ -146,11 +196,14 @@ public class ThirdPersonController : MonoBehaviour
         if (context.performed)
         {
             IWeapon onHand = GetComponentInChildren<IWeapon>();
-
             if (onHand != null)
             {
                 Debug.Log("Weapon Fired!");
                 onHand.MainAttack();
+            }
+            else
+            {
+                Debug.Log("NULL!");
             }
         }
     }
@@ -165,6 +218,17 @@ public class ThirdPersonController : MonoBehaviour
                 Debug.Log("Weapon Stance Switched");
                 onHand.SecondaryAttack();
             }
+            else
+            {
+                Debug.Log("NULL!");
+            }
         }
     }
+
+    public void GetAnimatorCompononet()
+    {
+        animator = GetComponentInChildren<Animator>();
+    }
+
+
 }

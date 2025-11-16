@@ -93,8 +93,9 @@ public class GameManager : MonoBehaviour
     public void SpawnChrahterAtIndex(int index)
     {
         Debug.Log(characters[index].characterName + " spawned");
-        player = Instantiate(characters[index].characterPrefab, spawnObjectParent.position, spawnObjectParent.rotation, spawnObjectParent.transform);
+        GameObject player = Instantiate(characters[index].characterPrefab, spawnObjectParent.position, spawnObjectParent.rotation, spawnObjectParent.transform);
         
+        ThirdPersonController.instance.GetAnimatorCompononet();
         GameObject heroNameUI = GameObject.Find("HeroName");
         heroNameUI.GetComponent<TextMeshProUGUI>().text = characters[index].characterName;
         ActiveControl(true);
