@@ -14,7 +14,7 @@ public class ThirdPersonController : MonoBehaviour
     public static ThirdPersonController instance { get; private set; }
     //private PlayerInput playerInput;
     [Header("Movement and TPS Camera")]
-    [SerializeField] private CharacterController characterController;
+    [SerializeField] public CharacterController characterController;
     [SerializeField, Range(0f, 100f)] private float speed = 10f;
     [SerializeField, Range(0f, 1f)] private float rotationSmoothTime = 0.5f;
     private float rotationVelocity;
@@ -27,6 +27,10 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField, Range(1f, 2f)] private float groundRange;
     [Header("Interact")]
     [SerializeField, Range(0f, 100f)] private float camRange = 20f;
+    [SerializeField, Range(0f, 100f)] private float camStartOffset = 1f;
+    /*[SerializeField, Range(0f, 100f)] private float camStartOrginX = 10f;
+    [SerializeField, Range(0f, 100f)] private float camStartOrginY = 10f;
+    [SerializeField, Range(0f, 100f)] private float camStartOrginZ = 10f;*/
     public PlayerInputActions playerInputActions;
 
     [Header("Animation")]
@@ -59,7 +63,8 @@ public class ThirdPersonController : MonoBehaviour
     void FixedUpdate()
     {
         MovementHandle();
-        Debug.DrawRay(cam.position, cam.forward * camRange, Color.red);
+        CameraRay();
+
     }
 
     void OnDisable()
@@ -104,7 +109,7 @@ public class ThirdPersonController : MonoBehaviour
     {
         if (!context.performed) return;
         if (isAttacking) return;
-        
+
         if (isPlayerOnGround())
         {
             gravity = jumpForce;
@@ -175,7 +180,7 @@ public class ThirdPersonController : MonoBehaviour
 
 
         RaycastHit hit;
-        if (Physics.Raycast(cam.position, cam.forward, out hit, camRange))
+        if (Physics.Raycast(GetRayStartOrgin() /*+ new Vector3(camStartOrginX,camStartOrginY,camStartOrginZ)*/, cam.forward, out hit, camRange))
         {
             IInteractable interactable = hit.collider.GetComponent<IInteractable>();
             if (interactable != null)
@@ -183,6 +188,14 @@ public class ThirdPersonController : MonoBehaviour
                 interactable.Interact();
             }
         }
+    }
+    private Vector3 GetRayStartOrgin()
+    {
+        return cam.position + (cam.forward * camStartOffset);
+    }
+    private void CameraRay()
+    {
+        Debug.DrawRay(GetRayStartOrgin() /*+ new Vector3(camStartOrginX,camStartOrginY,camStartOrginZ)*/, cam.forward * camRange, Color.red);
     }
     #endregion
     public void MenuToggle(InputAction.CallbackContext context)

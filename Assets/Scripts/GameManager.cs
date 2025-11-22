@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private CharacterData[] characters = new CharacterData[3];
 
-    private GameObject player;
+    [SerializeField] private GameObject player;
     private GameObject freeLookCamera;
     public EGameState gameState;
 
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
     public void SpawnChrahterAtIndex(int index)
     {
         Debug.Log(characters[index].characterName + " spawned");
-        GameObject player = Instantiate(characters[index].characterPrefab, spawnObjectParent.position, spawnObjectParent.rotation, spawnObjectParent.transform);
+        player = Instantiate(characters[index].characterPrefab, spawnObjectParent.position, spawnObjectParent.rotation, spawnObjectParent.transform);
         
         ThirdPersonController.instance.GetAnimatorCompononet();
         GameObject heroNameUI = GameObject.Find("HeroName");
