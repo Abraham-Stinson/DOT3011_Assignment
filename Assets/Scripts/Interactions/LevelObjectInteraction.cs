@@ -38,9 +38,18 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
         GameObject spawnObj = GameObject.Find("PlayerSpawnPoint");
         Vector3 targetPos = spawnObj.transform.position + new Vector3(0, tpPlayerPosY, 0);
 
-        player.characterController.enabled = false;
+        CharacterController cc = player.GetComponent<CharacterController>();
+        if (cc != null)
+        {
+            cc.enabled = false;
+        }
+
         player.transform.position = targetPos;
-        player.characterController.enabled = true;
+
+        if (cc != null)
+        {
+            cc.enabled = true;
+        }
     }
     // Start is called before the first frame update
     void Start()
