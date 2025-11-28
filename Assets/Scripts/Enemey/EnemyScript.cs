@@ -46,6 +46,12 @@ public class EnemyScript : MonoBehaviour
     private bool isRotating = true;
     private Quaternion targetRotation;
     private float patrolTimer;
+
+    [Header ("DamageUI")]
+    [SerializeField] private GameObject DamageUI;
+    [SerializeField] private float minDamageUIScale = 1.0f;
+    [SerializeField] private float maxDamageUIScale = 2.0f;
+    [SerializeField] private float maxHealthRatioForMaxScale = 0.3f;
     void Start()
     {
         cam = Camera.main;
@@ -187,6 +193,8 @@ public class EnemyScript : MonoBehaviour
     {
         enemyHealth -= damage;
         Debug.Log("Enemy Dealed damage" + damage);
+
+        ShowOnUI(damage);
         if (enemyHealth <= 0)
         {
             Debug.Log("Düşman Öldü");
@@ -196,6 +204,27 @@ public class EnemyScript : MonoBehaviour
         if (!healthBar.activeSelf)
         {
             healthBar.SetActive(true);
+        }
+
+    }
+
+    void ShowOnUI(float damage)
+    {
+        float damageRatio = damage / maxHealth;
+        
+        float normalizedScaleRatio = Mathf.Clamp01(damageRatio / maxHealthRatioForMaxScale);
+        
+        float finalScale = Mathf.Lerp(minDamageUIScale, maxDamageUIScale, normalizedScaleRatio);
+
+        Vector3 spawnPos = transform.position + Vector3.up * 1.5f;
+        
+        GameObject dealedDamageUI = Instantiate(DamageUI, spawnPos, Quaternion.identity);
+        
+        var dealedDamageUIScript = dealedDamageUI.GetComponent<enemyDealedDamageUI>();
+        
+        if (dealedDamageUIScript != null)
+        {
+            dealedDamageUIScript.Initialize(damage, finalScale);
         }
 
     }

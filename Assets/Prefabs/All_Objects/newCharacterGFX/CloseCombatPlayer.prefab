@@ -2067,11 +2067,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: swordFBX
       objectReference: {fileID: 0}
-    - target: {fileID: 6928503184586208370, guid: a78c3d955e0d1f04684613e328530d1f,
-        type: 3}
-      propertyPath: m_Layer
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 7740892110800039624, guid: a78c3d955e0d1f04684613e328530d1f,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6684177243302994285}
   - component: {fileID: 8233308371150867307}
   - component: {fileID: 8873780666354095527}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: swordFBX
   m_TagString: Untagged
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
@@ -56,6 +56,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stickLenght: 1.1
   nightStickDamage: 10
+  combo:
+  - {fileID: 11400000, guid: b39434f3c401f7342af531467ecaf3b6, type: 2}
+  - {fileID: 11400000, guid: da1ada1d7aaeb0f40b9079f988a07be2, type: 2}
+  - {fileID: 11400000, guid: b39434f3c401f7342af531467ecaf3b6, type: 2}
+  - {fileID: 11400000, guid: da1ada1d7aaeb0f40b9079f988a07be2, type: 2}
+  - {fileID: 11400000, guid: 8e7a555d081ced84e80799c700dce37e, type: 2}
 --- !u!23 &8873780666354095527
 MeshRenderer:
   m_ObjectHideFlags: 0

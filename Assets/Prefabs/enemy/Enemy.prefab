@@ -292,6 +292,11 @@ MonoBehaviour:
   chaseRange: 10
   attackRange: 2
   attackCooldown: 1.5
+  DamageUI: {fileID: 1880259380579912377, guid: 1673d1b2023aa844d84d6204c9efbf60,
+    type: 3}
+  minDamageUIScale: 1
+  maxDamageUIScale: 2
+  maxHealthRatioForMaxScale: 0.3
 --- !u!136 &41775747979217663
 CapsuleCollider:
   m_ObjectHideFlags: 0
