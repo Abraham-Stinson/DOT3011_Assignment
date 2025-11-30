@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.SearchService;
 using UnityEngine;
@@ -10,6 +11,13 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
 
     [SerializeField] private string loadToScene;
     [SerializeField] private float tpPlayerPosY = 3;
+    private MeshRenderer meshRednerer;
+
+
+    private void Awake()
+    {
+        meshRednerer = GetComponent<MeshRenderer>();
+    }
     public void Interact()
     {
         Debug.Log($"Obje ile etkileşime geçildi {loadToScene} yükleniyor");
@@ -51,15 +59,22 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
             cc.enabled = true;
         }
     }
-    // Start is called before the first frame update
-    void Start()
-    {
 
+    public void ChangeMaterialOfArtifact(Material brokenMaterial)
+    {
+        if (meshRednerer != null)
+        {
+            Debug.Log("Curslendi");
+            meshRednerer.material = brokenMaterial; //Changin material
+        }
+        else
+        {
+            Debug.Log("Null");
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void AppendLevelName(string levelName)
     {
-        //Debug.Log(loadToScene.ToString());
+        loadToScene = levelName;
     }
 }
