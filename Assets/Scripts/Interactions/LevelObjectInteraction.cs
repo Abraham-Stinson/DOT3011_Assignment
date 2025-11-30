@@ -11,15 +11,17 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
 
     [SerializeField] private string loadToScene;
     [SerializeField] private float tpPlayerPosY = 3;
-    private MeshRenderer meshRednerer;
+    private MeshRenderer meshRenderer;
+    private Material cursedMaterial;
 
 
     private void Awake()
     {
-        meshRednerer = GetComponent<MeshRenderer>();
+        meshRenderer = GetComponent<MeshRenderer>();
     }
     public void Interact()
     {
+        LevelManager.instance.ModifyFormerPositionForReturn(this.transform.position + (this.transform.forward * 3));
         Debug.Log($"Obje ile etkileşime geçildi {loadToScene} yükleniyor");
 
         StartCoroutine(LoadSceneAndTeleport());
@@ -32,15 +34,18 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
     IEnumerator LoadSceneAndTeleport()
     {
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(loadToScene, LoadSceneMode.Additive);
-
+        LevelManager.instance.ModifyCurrentLevelName(loadToScene);
         while (!asyncOperation.isDone)
         {
             yield return null;
         }
 
-        TeleportPlayer();
+        TeleportPlayerToLevel();
+
+        Destroy(GetComponent<LevelObjectInteraction>());
+        SetDefaultMaterial();
     }
-    private void TeleportPlayer()
+    private void TeleportPlayerToLevel()
     {
         var player = ThirdPersonController.instance;
         GameObject spawnObj = GameObject.Find("PlayerSpawnPoint");
@@ -60,12 +65,39 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
         }
     }
 
+    public void TeleportPlayerBack()
+    {
+
+    }
+
     public void ChangeMaterialOfArtifact(Material brokenMaterial)
     {
-        if (meshRednerer != null)
+        cursedMaterial = brokenMaterial;
+        if (meshRenderer != null)
         {
             Debug.Log("Curslendi");
-            meshRednerer.material = brokenMaterial; //Changin material
+            List<Material> materialList = new List<Material>(meshRenderer.materials);
+            materialList.Add(brokenMaterial);
+            meshRenderer.materials = materialList.ToArray();
+        }
+        else
+        {
+            Debug.Log("Null");
+        }
+    }
+    public void SetDefaultMaterial()
+    {
+        if (meshRenderer != null)
+        {
+            List<Material> materialList = new List<Material>(meshRenderer.materials);
+            for (int i = materialList.Count - 1; i >= 0; i--)
+            {
+                if (materialList[i].name.StartsWith(cursedMaterial.name))
+                {
+                    materialList.RemoveAt(i);
+                    break;
+                }
+            }
         }
         else
         {
