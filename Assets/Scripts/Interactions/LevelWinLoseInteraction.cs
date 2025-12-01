@@ -9,6 +9,15 @@ public class LevelWinLoseInteraction : MonoBehaviour, IInteractable
     {
         LevelManager.instance.ReturnFromLevel();
         LevelManager.instance.DestroyCurrentLevel();
+
+        if (isWin)
+        {
+            LevelManager.instance.ReturnWithWinFromLevel();
+        }
+        else
+        {
+            LevelManager.instance.ReturnWithLoseFromLevel();
+        }
     }
 
     

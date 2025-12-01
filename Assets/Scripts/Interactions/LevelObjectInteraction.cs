@@ -18,9 +18,14 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
     private void Awake()
     {
         meshRenderer = GetComponent<MeshRenderer>();
+        if (meshRenderer == null)
+        {
+            meshRenderer = GetComponentInChildren<MeshRenderer>();
+        }
     }
     public void Interact()
     {
+        LevelManager.instance.SaveLastInteractArtifact(this.gameObject.GetComponent<LevelObjectInteraction>());
         LevelManager.instance.ModifyFormerPositionForReturn(this.transform.position + (this.transform.forward * 3));
         Debug.Log($"Obje ile etkileşime geçildi {loadToScene} yükleniyor");
 
@@ -42,8 +47,8 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
 
         TeleportPlayerToLevel();
 
-        Destroy(GetComponent<LevelObjectInteraction>());
-        SetDefaultMaterial();
+
+        //SetDefaultMaterial();
     }
     private void TeleportPlayerToLevel()
     {
@@ -72,17 +77,22 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
 
     public void ChangeMaterialOfArtifact(Material brokenMaterial)
     {
+        if (meshRenderer == null)
+        {
+            meshRenderer = GetComponent<MeshRenderer>();
+            if (meshRenderer == null) meshRenderer = GetComponentInChildren<MeshRenderer>();
+        }
         cursedMaterial = brokenMaterial;
         if (meshRenderer != null)
         {
-            Debug.Log("Curslendi");
+            Debug.Log($"{gameObject.name} lanetleniyor (Material ekleniyor)...");
             List<Material> materialList = new List<Material>(meshRenderer.materials);
             materialList.Add(brokenMaterial);
             meshRenderer.materials = materialList.ToArray();
         }
         else
         {
-            Debug.Log("Null");
+            Debug.LogError($"HATA: {gameObject.name} objesinde MeshRenderer bulunamadı! Material değiştirilemiyor.");
         }
     }
     public void SetDefaultMaterial()
@@ -90,6 +100,7 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
         if (meshRenderer != null)
         {
             List<Material> materialList = new List<Material>(meshRenderer.materials);
+            bool materialFound = false;
             for (int i = materialList.Count - 1; i >= 0; i--)
             {
                 if (materialList[i].name.StartsWith(cursedMaterial.name))
@@ -98,6 +109,12 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
                     break;
                 }
             }
+
+            if (materialFound)
+            {
+                meshRenderer.materials = materialList.ToArray();
+            }
+
         }
         else
         {

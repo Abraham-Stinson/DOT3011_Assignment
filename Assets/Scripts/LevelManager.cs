@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -9,6 +10,7 @@ using UnityEngine.XR;
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
+    private string currentMainLevel;
     [Header("Tree Settings")]
     [SerializeField] private GameObject treeGO;
     [SerializeField] private Transform treeSpawnTransform;
@@ -21,14 +23,20 @@ public class LevelManager : MonoBehaviour
     [Header("Game Mechanic")]
     private Vector3 savedPlayerReturnPosition;
     [SerializeField] public bool isPlayerGetFirstWin = false;
-
     [SerializeField] private string currentLevelName;
+    private LevelObjectInteraction levelObjectInteraction;
+    private int levelCount;
+    private int totalWinCount;
     void Awake()
     {
         if (instance == null)
         {
             instance = this;
         }
+        currentMainLevel = this.gameObject.scene.name;
+        Debug.Log($"Level manager'a ait Suan ki levelin adi: {currentMainLevel}");
+        levelCount = museumArtifacts.Count();
+        Debug.Log($"Toplam level sayisi: {levelCount}");
     }
     public void InstantiateTree()
     {
@@ -102,6 +110,50 @@ public class LevelManager : MonoBehaviour
     public bool isMuseumArtifactsCursedCheck()
     {
         return isMuseumArtifactsCursed;
+    }
+
+    private void ResetCurrentMainLevel()
+    {
+        if (string.IsNullOrEmpty(currentMainLevel))
+        {
+            Debug.LogError("CurrentMainLevel ismi boş! Reset atılamıyor.");
+            return;
+        }
+
+        Debug.Log($"{currentMainLevel} sahnesi baştan başlatılıyor (Reset)...");
+
+        SceneManager.LoadScene(currentMainLevel, LoadSceneMode.Single);
+    }
+
+    public void SaveLastInteractArtifact(LevelObjectInteraction artifactScript)
+    {
+        levelObjectInteraction = artifactScript;
+    }
+    public void ReturnWithWinFromLevel()
+    {
+        Debug.Log("Win");
+        totalWinCount++;
+        isPlayerGetFirstWin = true;
+
+        //ModifyFormerPositionForReturn(levelObjectInteraction.transform.position + (levelObjectInteraction.transform.forward * 3));
+        levelObjectInteraction.SetDefaultMaterial();
+        Destroy(levelObjectInteraction.gameObject.GetComponent<LevelObjectInteraction>());
+
+    }
+    public void ReturnWithLoseFromLevel()
+    {
+        if (!isPlayerGetFirstWin)
+        {
+            //COMPLETLY LOSE SCREEN
+            Debug.Log("COMPLETLY Lose Screen");
+            ResetCurrentMainLevel();
+        }
+        else
+        {
+            //Respawn player to museum with lose
+            Debug.Log("CLASSIC Lose Screen");
+            ModifyFormerPositionForReturn(levelObjectInteraction.transform.position + (levelObjectInteraction.transform.forward * 3));
+        }
     }
 
 }

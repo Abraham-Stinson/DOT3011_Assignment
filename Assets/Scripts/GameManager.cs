@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         instance = this;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
     void Start()
     {
@@ -94,7 +96,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log(characters[index].characterName + " spawned");
         player = Instantiate(characters[index].characterPrefab, spawnObjectParent.position, spawnObjectParent.rotation, spawnObjectParent.transform);
-        
+
         ThirdPersonController.instance.GetAnimatorCompononet();
         GameObject heroNameUI = GameObject.Find("HeroName");
         heroNameUI.GetComponent<TextMeshProUGUI>().text = characters[index].characterName;
