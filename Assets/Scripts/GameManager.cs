@@ -91,6 +91,23 @@ public class GameManager : MonoBehaviour
         SpawnChrahterAtIndex(selectedCharacterIndex);
     }
 
+    public void GameOverWin()
+    {
+        Time.timeScale = 0f;
+        ActiveControl(false);
+        SetGameState(EGameState.GAMEOVERWIN);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+    public void GameOverLose()
+    {
+        Time.timeScale = 0f;
+        ActiveControl(false);
+        SetGameState(EGameState.GAMEOVERLOSE);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
 
     public void SpawnChrahterAtIndex(int index)
     {

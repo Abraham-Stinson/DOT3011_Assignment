@@ -9,5 +9,6 @@ public enum EGameState
     CHRACTERSELECTION = 2,
     INGAME = 3,
     PAUSE = 4,
-    GAMEOVER = 5
+    GAMEOVERWIN = 5,
+    GAMEOVERLOSE = 6
 }

@@ -112,7 +112,7 @@ public class LevelManager : MonoBehaviour
         return isMuseumArtifactsCursed;
     }
 
-    private void ResetCurrentMainLevel()
+    public void ResetCurrentMainLevel()
     {
         if (string.IsNullOrEmpty(currentMainLevel))
         {
@@ -131,6 +131,7 @@ public class LevelManager : MonoBehaviour
     }
     public void ReturnWithWinFromLevel()
     {
+        
         Debug.Log("Win");
         totalWinCount++;
         isPlayerGetFirstWin = true;
@@ -139,6 +140,11 @@ public class LevelManager : MonoBehaviour
         levelObjectInteraction.SetDefaultMaterial();
         Destroy(levelObjectInteraction.gameObject.GetComponent<LevelObjectInteraction>());
 
+        if(totalWinCount == levelCount)
+        {
+            GameManager.instance.GameOverWin();
+        }
+
     }
     public void ReturnWithLoseFromLevel()
     {
@@ -146,7 +152,8 @@ public class LevelManager : MonoBehaviour
         {
             //COMPLETLY LOSE SCREEN
             Debug.Log("COMPLETLY Lose Screen");
-            ResetCurrentMainLevel();
+            GameManager.instance.GameOverLose();
+            //ResetCurrentMainLevel();
         }
         else
         {

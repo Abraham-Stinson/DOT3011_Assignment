@@ -10,7 +10,8 @@ public class UIManager : MonoBehaviour, IGameStateListener
   [SerializeField] private GameObject characterSelectionPanel;
   [SerializeField] private GameObject inGamePanel;
   [SerializeField] private GameObject pausePanel;
-  [SerializeField] private GameObject gameOverPanel;
+  [SerializeField] private GameObject gameOverWinPanel;
+  [SerializeField] private GameObject gameOverLosePanel;
 
   void Awake()
   {
@@ -23,7 +24,8 @@ public class UIManager : MonoBehaviour, IGameStateListener
     characterSelectionPanel.SetActive(gameState == EGameState.CHRACTERSELECTION);
     inGamePanel.SetActive(gameState == EGameState.INGAME);
     pausePanel.SetActive(gameState == EGameState.PAUSE);
-    /*gameOverPanel.SetActive(gameState == EGameState.GAMEOVER);*/
+    gameOverWinPanel.SetActive(gameState == EGameState.GAMEOVERWIN);
+    gameOverLosePanel.SetActive(gameState == EGameState.GAMEOVERLOSE);
   }
   private bool isGamePaused = false;
   public void PauseMenuToggle()
