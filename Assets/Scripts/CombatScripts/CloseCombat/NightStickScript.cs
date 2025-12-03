@@ -12,20 +12,24 @@ public class NightStickScript : WeaponBase
     List<GameObject> dealtDamage;
     [SerializeField] float stickLenght;
     [SerializeField] float nightStickDamage;
-    [SerializeField] private string animationName = "combatAttack";
-    
-    private float attackAnimationTime = 0f;
-    private float nextAttackTime = 0f;
-    
+
+
+    [Header("Combo")]
+    [SerializeField] private List<AttackSO> combo;
+    float lastClickedTime;
+    float lastComboTime;
+    int comboCounter;
+
+    float maxCombatTime = 0.5f;
+    float maxClickTime = 0.2f;
     void Start()
     {
         animator = GetComponentInParent<Animator>();
         canDealDamage = false;
         dealtDamage = new List<GameObject>();
-        
-        attackAnimationTime = GetAttackAnimtionTime(animationName);
+
     }
-    
+
     void Update()
     {
         if (canDealDamage)
@@ -38,10 +42,56 @@ public class NightStickScript : WeaponBase
                 if (!dealtDamage.Contains(hit.transform.gameObject))
                 {
                     dealtDamage.Add(hit.transform.gameObject);
-                    hit.transform.gameObject.GetComponent<EnemyScript>().DealDamage(nightStickDamage);
+                    if (hit.transform.gameObject.GetComponent<EnemyScript>() != null)
+                    {
+                        hit.transform.gameObject.GetComponent<EnemyScript>().DealDamage(nightStickDamage);
+                    }
+
+
                 }
             }
+
         }
+
+        ExitAttack();
+
+    }
+    public override void MainAttack()
+    {
+        if (Time.time - lastComboTime > maxCombatTime && comboCounter < combo.Count)
+        {
+            CancelInvoke("EndCombo");
+            if (Time.time - lastClickedTime >= maxClickTime)
+            {
+                animator.runtimeAnimatorController = combo[comboCounter].animatorOV;
+                animator.Play("Attack", 0, 0);
+                comboCounter++;
+
+                lastClickedTime = Time.time;
+
+                if (comboCounter > combo.Count)
+                {
+                    comboCounter = 0;
+                }
+            }
+
+        }
+    }
+    private void ExitAttack()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+        {
+            Invoke("EndCombo", 1);
+        }
+    }
+    private void EndCombo()
+    {
+        comboCounter = 0;
+        lastComboTime = Time.time;
+    }
+    public override void SecondaryAttack()
+    {
+
     }
 
     public void StartDealDamage()
@@ -50,7 +100,7 @@ public class NightStickScript : WeaponBase
         dealtDamage.Clear();
         Debug.Log("Function: StartDealDamage() Can deal damage: " + canDealDamage);
     }
-    
+
     public void EndDealDamage()
     {
         canDealDamage = false;
@@ -63,46 +113,6 @@ public class NightStickScript : WeaponBase
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, transform.position - (-transform.right) * stickLenght);
     }
-    
-    public override void MainAttack()
-    {
-        if (Time.time >= nextAttackTime)
-        {
-            ThirdPersonController.instance.isAttacking = true;
-            Debug.Log("Main attack yaptım");
-            animator.SetTrigger("attack");
-            
-            nextAttackTime = Time.time + attackAnimationTime;
-            
-            //Debug.Log($"Next attack time: {nextAttackTime}, Current time: {Time.time}");
-        }
-        else
-        {
-           // Debug.Log($"Cooldown! Kalan süre: {nextAttackTime - Time.time:F2} saniye");
-        }
-    }
-    
-    public override void SecondaryAttack()
-    {
 
-    }
 
-    public override void UltimateAttack()
-    {
-        
-    }
-    
-    private float GetAttackAnimtionTime(string name)
-    {
-        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
-        foreach (AnimationClip clip in clips)
-        {
-            if (clip.name == name)
-            {
-                return clip.length;
-            }
-        }
-        Debug.LogWarning($"Animasyon bulunamadı: {name}");
-        return 1f;
-    }
 }

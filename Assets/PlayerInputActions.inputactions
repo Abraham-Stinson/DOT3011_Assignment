@@ -4,21 +4,39 @@
     "maps": [
         {
             "name": "Player",
-            "id": "74676823-131e-41a1-b79d-4cad72730255",
+            "id": "ae9ddec6-57bd-462d-bb33-fe936409c59a",
             "actions": [
                 {
-                    "name": "Fire",
+                    "name": "Movement",
+                    "type": "Value",
+                    "id": "421b1a5e-11a4-4494-8036-9b0302dd3afb",
+                    "expectedControlType": "Vector2",
+                    "processors": "NormalizeVector2",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Jump",
                     "type": "Button",
-                    "id": "c5ff2ce1-e697-4a84-84af-db4c3310af02",
+                    "id": "db0f78fa-c57e-46a7-a78b-7f65f8fb6551",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SwitchStance",
+                    "name": "Interact",
                     "type": "Button",
-                    "id": "5d33de76-31a2-45b3-b27a-f3e2ed81b1ca",
+                    "id": "fa31cd32-dc00-4a94-8d07-545c5d3a9b61",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MenuTrigger",
+                    "type": "Button",
+                    "id": "4c983a91-665e-455d-8398-03d8d9c4f426",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -54,24 +72,90 @@
             ],
             "bindings": [
                 {
-                    "name": "",
-                    "id": "50919114-3d5a-4f2e-9183-6ca542f6a07c",
-                    "path": "<Mouse>/leftButton",
+                    "name": "2D Vector",
+                    "id": "717e16e3-9d98-4f85-b8fc-d01d0d3a4808",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Fire",
+                    "action": "Movement",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "4f2c31fb-61ce-430d-a7d9-9b75d3844b77",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "c9d5374e-074c-4876-ae58-711f65f3b71e",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "5c5a3a08-91ef-4e1e-8142-3029cc0997ea",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "2d65aa01-3a1b-40fa-8b62-06857a9b9070",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "c0d2f5b3-e096-4d1d-9019-7bfe4497fdb0",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "8e571f3c-1088-4ea1-a4ac-4a2029d0827c",
-                    "path": "<Keyboard>/ctrl",
+                    "id": "82ff73f3-4e24-45dc-b757-d7c54a2c65df",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SwitchStance",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b7204489-b1a4-436b-b74b-7d981f121baa",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MenuTrigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
