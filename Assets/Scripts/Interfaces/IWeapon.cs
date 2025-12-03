@@ -6,4 +6,5 @@ interface IWeapon
 {
     void MainAttack();
     void SecondaryAttack();
+    void UltimateAttack();
 }

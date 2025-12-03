@@ -37,11 +37,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FresnelPower: -0.5
+    - _FresnelPower: 659.24
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _BeamColor: {r: 5.278936, g: 37.893238, b: 59.52846, a: 1}
+    - _BeamColor: {r: 27.13427, g: 27.13427, b: 191.74904, a: 0}
     - _ScrollSpeed: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &7379118302020139151
