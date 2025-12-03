@@ -121,9 +121,16 @@ public class ThirdPersonController : MonoBehaviour
 
             if (onHand != null)
             {
-                Debug.Log("Weapon Fired!");
+                Debug.Log("Weapon Main Attack Fired!");
                 onHand.MainAttack();
             }
+<<<<<<< Updated upstream
+=======
+            else
+            {
+                Debug.Log("NO WEAPON ON HAND!");
+            }
+>>>>>>> Stashed changes
         }
     }
     public void SecondaryAttack(InputAction.CallbackContext context)
@@ -134,9 +141,33 @@ public class ThirdPersonController : MonoBehaviour
 
             if (onHand != null)
             {
-                Debug.Log("Weapon Stance Switched");
+                Debug.Log("Weapon Secondary Attack Fired!");
                 onHand.SecondaryAttack();
             }
+<<<<<<< Updated upstream
+=======
+            else
+            {
+                Debug.Log("NO WEAPON ON HAND!");
+            }
+        }
+    }
+    public void UltimateAttack(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            IWeapon onHand = GetComponentInChildren<IWeapon>();
+
+            if (onHand != null)
+            {
+                Debug.Log("Weapon ULTIMATE ATTACK Fired!");
+                onHand.UltimateAttack();
+            }
+            else
+            {
+                Debug.Log("NO WEAPON ON HAND!");
+            }
+>>>>>>> Stashed changes
         }
     }
 }

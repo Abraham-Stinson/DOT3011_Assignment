@@ -145,6 +145,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UltimateAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""b1dcd752-134d-48ee-bf7c-ccc3202585dd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -257,6 +266,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""SecondaryAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e1491cd1-2060-44a1-8f78-97adf264dc48"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UltimateAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -271,6 +291,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_MenuTrigger = m_Player.FindAction("MenuTrigger", throwIfNotFound: true);
         m_Player_MainAttack = m_Player.FindAction("MainAttack", throwIfNotFound: true);
         m_Player_SecondaryAttack = m_Player.FindAction("SecondaryAttack", throwIfNotFound: true);
+        m_Player_UltimateAttack = m_Player.FindAction("UltimateAttack", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -357,6 +378,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_MenuTrigger;
     private readonly InputAction m_Player_MainAttack;
     private readonly InputAction m_Player_SecondaryAttack;
+    private readonly InputAction m_Player_UltimateAttack;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -392,6 +414,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/SecondaryAttack".
         /// </summary>
         public InputAction @SecondaryAttack => m_Wrapper.m_Player_SecondaryAttack;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/UltimateAttack".
+        /// </summary>
+        public InputAction @UltimateAttack => m_Wrapper.m_Player_UltimateAttack;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -436,6 +462,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @SecondaryAttack.started += instance.OnSecondaryAttack;
             @SecondaryAttack.performed += instance.OnSecondaryAttack;
             @SecondaryAttack.canceled += instance.OnSecondaryAttack;
+            @UltimateAttack.started += instance.OnUltimateAttack;
+            @UltimateAttack.performed += instance.OnUltimateAttack;
+            @UltimateAttack.canceled += instance.OnUltimateAttack;
         }
 
         /// <summary>
@@ -465,6 +494,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @SecondaryAttack.started -= instance.OnSecondaryAttack;
             @SecondaryAttack.performed -= instance.OnSecondaryAttack;
             @SecondaryAttack.canceled -= instance.OnSecondaryAttack;
+            @UltimateAttack.started -= instance.OnUltimateAttack;
+            @UltimateAttack.performed -= instance.OnUltimateAttack;
+            @UltimateAttack.canceled -= instance.OnUltimateAttack;
         }
 
         /// <summary>
@@ -547,5 +579,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSecondaryAttack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UltimateAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUltimateAttack(InputAction.CallbackContext context);
     }
 }

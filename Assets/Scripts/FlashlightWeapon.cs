@@ -7,6 +7,7 @@ public class FlashlightWeapon : WeaponBase
 
     [SerializeField] private LightBeamShooter narrowShooter;
     [SerializeField] private LightBeamShooter wideShooter;
+    [SerializeField] private LightUltimateShooter ultimateShooter;
     private Camera cam;
 
     private void Start()
@@ -29,4 +30,11 @@ public class FlashlightWeapon : WeaponBase
         wideShooter.Shoot(origin, direction);
     }
 
+    public override void UltimateAttack()
+    {
+        Vector3 origin = cam.transform.position;
+        Vector3 direction = cam.transform.forward;
+
+        ultimateShooter.Shoot(origin, direction);
+    }
 }
