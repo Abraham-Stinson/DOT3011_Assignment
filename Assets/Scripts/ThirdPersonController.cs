@@ -252,11 +252,7 @@ public class ThirdPersonController : MonoBehaviour
             {
                 Debug.Log("NO WEAPON ON HAND!");
             }
-=======
-            else
-            {
-                Debug.Log("NULL!");
-            }
+            
         }
     }
 
