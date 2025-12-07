@@ -94,6 +94,11 @@ public class NightStickScript : WeaponBase
 
     }
 
+    public override void UltimateAttack()
+    {
+        
+    }
+
     public void StartDealDamage()
     {
         canDealDamage = true;
