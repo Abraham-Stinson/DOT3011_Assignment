@@ -11,7 +11,7 @@ public class NightStickScript : WeaponBase
     bool canDealDamage;
     List<GameObject> dealtDamage;
     [SerializeField] float stickLenght;
-    [SerializeField] float nightStickDamage;
+    //[SerializeField] float nightStickDamage;
 
 
     [Header("Combo")]
@@ -24,6 +24,7 @@ public class NightStickScript : WeaponBase
     float maxClickTime = 0.2f;
     void Start()
     {
+        
         animator = GetComponentInParent<Animator>();
         canDealDamage = false;
         dealtDamage = new List<GameObject>();
@@ -44,7 +45,9 @@ public class NightStickScript : WeaponBase
                     dealtDamage.Add(hit.transform.gameObject);
                     if (hit.transform.gameObject.GetComponent<EnemyScript>() != null)
                     {
-                        hit.transform.gameObject.GetComponent<EnemyScript>().DealDamage(nightStickDamage);
+                        var playerStatisticSO  = GameManager.instance.characters[GameManager.instance.currentHeroIndex].playerStatisticsSO;
+                        hit.transform.gameObject.GetComponent<EnemyScript>().DealDamage(playerStatisticSO.damage*playerStatisticSO.damageMultiplayer);
+                        Debug.Log($"Player StatisticSO: {playerStatisticSO.damage*playerStatisticSO.damageMultiplayer}");
                     }
 
 

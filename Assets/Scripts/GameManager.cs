@@ -20,15 +20,17 @@ public class GameManager : MonoBehaviour
         public string characterName;
         public GameObject characterPrefab;
         //public Sprite weaponIcon;
+        public PlayerStatisticsSO playerStatisticsSO;
     }
 
-    [SerializeField] private CharacterData[] characters = new CharacterData[3];
+    public CharacterData[] characters = new CharacterData[3];
 
     [SerializeField] private GameObject player;
     private GameObject freeLookCamera;
     public EGameState gameState;
 
     [SerializeField] public Transform spawnObjectParent;
+    public int currentHeroIndex;
     void Awake()
     {
         instance = this;
@@ -111,6 +113,7 @@ public class GameManager : MonoBehaviour
 
     public void SpawnChrahterAtIndex(int index)
     {
+        currentHeroIndex = index;
         Debug.Log(characters[index].characterName + " spawned");
         player = Instantiate(characters[index].characterPrefab, spawnObjectParent.position, spawnObjectParent.rotation, spawnObjectParent.transform);
 
