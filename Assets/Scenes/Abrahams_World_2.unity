@@ -4849,17 +4849,22 @@ MonoBehaviour:
     characterName: Ali
     characterPrefab: {fileID: 5007611618809505255, guid: 1ee27b38db8bd4a45a711f2345da3e0c,
       type: 3}
+    playerStatisticsSO: {fileID: 11400000, guid: 72310f71592b1424eabe9aeba103a175,
+      type: 2}
   - characterType: 1
     characterName: Elif
     characterPrefab: {fileID: 7841095973522252913, guid: 8273526c073943b4ca9fd0cd5c6af80a,
       type: 3}
+    playerStatisticsSO: {fileID: 0}
   - characterType: 2
     characterName: Deniz
     characterPrefab: {fileID: 7045983482007791248, guid: a2c15ea20928e5849ae4e91b69d5e0e2,
       type: 3}
+    playerStatisticsSO: {fileID: 0}
   player: {fileID: 0}
   gameState: 0
   spawnObjectParent: {fileID: 4713595896696228196}
+  currentHeroIndex: 0
 --- !u!114 &4850786455454926180
 MonoBehaviour:
   m_ObjectHideFlags: 0

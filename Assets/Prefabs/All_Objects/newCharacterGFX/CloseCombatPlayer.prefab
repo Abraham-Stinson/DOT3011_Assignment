@@ -1174,6 +1174,7 @@ GameObject:
   - component: {fileID: 8338633938103105966}
   - component: {fileID: 7360457200514581970}
   - component: {fileID: 8973729369635659978}
+  - component: {fileID: 3605551926480681809}
   m_Layer: 2
   m_Name: CloseCombatPlayer
   m_TagString: Untagged
@@ -1254,6 +1255,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 322b03a71c8b99f4eae353baf0f1627a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3605551926480681809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5007611618809505255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71c47d9ca33369e489a00f18e9c556b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
 --- !u!1 &5145706061603184519
 GameObject:
   m_ObjectHideFlags: 0
