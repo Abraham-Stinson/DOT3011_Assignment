@@ -12,7 +12,9 @@ using Vector3 = UnityEngine.Vector3;
 
 public class EnemyScript : MonoBehaviour
 {
-
+    [SerializeField] private bool isEnemyCanDesicion;
+    [Header("Animation")]
+    private Animator animator;
 
     [Header("Health")]
     public float maxHealth = 100f;
@@ -29,6 +31,8 @@ public class EnemyScript : MonoBehaviour
 
     private Camera cam;
 
+
+
     private enum State
     {
         chase,
@@ -39,19 +43,41 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private State currentState;
     [SerializeField] private float lastAttackTime;
     [SerializeField, Range(0f, 100f)] private float enemyMovementSpeed = 5f;
+    [SerializeField, Range(0f, 100f)] private float enemyChasingSpeed = 7f;
     [SerializeField, Range(0f, 50f)] private float rotationSpeed = 5f;
     [SerializeField] private float chaseRange = 15f;
-    [SerializeField] private float attackRange = 3f;
+    [SerializeField] private float attackRange = 5f;
     [SerializeField] private float attackCooldown = 1.5f;
     private bool isRotating = true;
     private Quaternion targetRotation;
     private float patrolTimer;
 
-    [Header ("DamageUI")]
+    [Header("DamageUI")]
     [SerializeField] private GameObject DamageUI;
     [SerializeField] private float minDamageUIScale = 1.0f;
     [SerializeField] private float maxDamageUIScale = 2.0f;
     [SerializeField] private float maxHealthRatioForMaxScale = 0.3f;
+
+    [Header("Attack")]
+    [SerializeField] private bool isPatternRandom;
+    [SerializeField] private List<EnemyAttackSO> enemyAttackSOs;
+    [SerializeField] private bool isEnemyCanDealDamage;
+    private List<GameObject> dealtDamage;
+    [SerializeField, Range(0f, 10f)] private float enemyWeaponRange;
+    [SerializeField] private Transform[] enemyWeapon;
+    private float currentActiveDamage;
+    [Header("Attack Cooldown")]
+    float lastClickedTime;
+    float lastComboTime;
+    int comboCounter;
+    float maxCombatTime = 0.5f;
+    float maxClickTime = 0.2f;
+    void Awake()
+    {
+        animator = GetComponent<Animator>();
+        isEnemyCanDesicion = true;
+        dealtDamage = new List<GameObject>(); // <--- EKLENMELİ
+    }
     void Start()
     {
         cam = Camera.main;
@@ -73,6 +99,8 @@ public class EnemyScript : MonoBehaviour
         HealthUI();
         //ApprochingToThePlayer();
         DesicionAI();
+
+        CheckDealtDamage();
     }
     private void FindPlayerGO()
     {
@@ -90,9 +118,10 @@ public class EnemyScript : MonoBehaviour
 
     private void DesicionAI()
     {
-        if (GameManager.instance.gameState != EGameState.INGAME) return;
+        if (GameManager.instance.gameState != EGameState.INGAME || !isEnemyCanDesicion) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerGO.transform.position);
+        //Debug.Log("Mesafe: " + distanceToPlayer);
 
         if (distanceToPlayer > chaseRange)
         {
@@ -113,12 +142,30 @@ public class EnemyScript : MonoBehaviour
         {
             case State.idle:
                 Patrol();
+                if (distanceToPlayer <= chaseRange)
+                    currentState = State.chase;
                 break;
+
             case State.chase:
                 MoveToPlayer();
+                // BURASI ÖNEMLİ: Saldırıya geçiş
+                if (distanceToPlayer <= attackRange)
+                {
+                    currentState = State.attack;
+                    // Saldırıya geçer geçmez hareket animasyonlarını sustur
+                    ChangeMovementAnimatorParameters(false, false, false);
+                }
                 break;
+
             case State.attack:
                 Attack();
+                // BURASI ÖNEMLİ: Saldırıdan çıkış (Hysteresis)
+                // Oyuncu 3.0 birimden 3.1 birime çıktığı an koşmaya başlama.
+                // Biraz pay bırak (attackRange + 1f). Yani 4.0 birim uzaklaşana kadar saldırmaya devam etsin.
+                if (distanceToPlayer > attackRange + 1f)
+                {
+                    currentState = State.chase;
+                }
                 break;
         }
     }
@@ -129,6 +176,7 @@ public class EnemyScript : MonoBehaviour
         if (isRotating)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            ChangeMovementAnimatorParameters(true, false, false);//IDLE,WALK,CHASE
             if (Quaternion.Angle(transform.rotation, targetRotation) < 1f)
             {
                 isRotating = false;
@@ -137,6 +185,7 @@ public class EnemyScript : MonoBehaviour
         }
         else
         {
+            ChangeMovementAnimatorParameters(false, true, false);//IDLE,WALK,CHASE
             transform.Translate(Vector3.forward * enemyMovementSpeed * Time.deltaTime);
             patrolTimer -= Time.deltaTime;
             if (patrolTimer <= 0)
@@ -160,17 +209,53 @@ public class EnemyScript : MonoBehaviour
         if (direction != Vector3.zero)
         {
             Quaternion lookRotation = Quaternion.LookRotation(direction);
+            ChangeMovementAnimatorParameters(false, false, true);//IDLE,WALK,CHASE
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
 
         }
-        transform.Translate(Vector3.forward * enemyMovementSpeed * Time.deltaTime);
+        transform.Translate(Vector3.forward * enemyChasingSpeed * Time.deltaTime);
 
     }
     private void Attack()
     {
-        Debug.Log("Saldııır!");
-    }
+        ChangeMovementAnimatorParameters(false, false, false);
+        Vector3 direction = playerGO.transform.position - transform.position;
+        direction.y = 0;
+        if (direction != Vector3.zero)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+        }
 
+        if (Time.time - lastClickedTime > attackCooldown)
+        {
+            // Saldırı Animasyonunu Başlat
+            // Listenin dışına taşmayı önle
+            if (comboCounter >= enemyAttackSOs.Count) comboCounter = 0;
+
+            var currentAttackData = enemyAttackSOs[comboCounter];
+
+            // Animator'a saldırı klibini yükle
+            animator.runtimeAnimatorController = currentAttackData.animatorOV;
+
+            // Animasyonu ZORLA oynat
+            animator.Play("Attack_1", 0, 0f);
+
+            // Hasarı ayarla
+            currentActiveDamage = currentAttackData.damage;
+
+            Debug.Log("Saldırı Yapıldı! Combo: " + comboCounter);
+
+            // Bir sonraki vuruş için sayacı ve zamanı güncelle
+            lastClickedTime = Time.time;
+
+            // Combo sayacını artır (veya rastgele seç)
+            if (isPatternRandom)
+                comboCounter = Random.Range(0, enemyAttackSOs.Count);
+            else
+                comboCounter++;
+        }
+    }
     /*private void ApprochingToThePlayer()
     {
         if (playerGO == null && GameManager.instance.gameState != EGameState.INGAME)
@@ -211,21 +296,80 @@ public class EnemyScript : MonoBehaviour
     void ShowOnUI(float damage)
     {
         float damageRatio = damage / maxHealth;
-        
+
         float normalizedScaleRatio = Mathf.Clamp01(damageRatio / maxHealthRatioForMaxScale);
-        
+
         float finalScale = Mathf.Lerp(minDamageUIScale, maxDamageUIScale, normalizedScaleRatio);
 
         Vector3 spawnPos = transform.position + Vector3.up * 1.5f;
-        
+
         GameObject dealedDamageUI = Instantiate(DamageUI, spawnPos, Quaternion.identity);
-        
+
         var dealedDamageUIScript = dealedDamageUI.GetComponent<enemyDealedDamageUI>();
-        
+
         if (dealedDamageUIScript != null)
         {
             dealedDamageUIScript.Initialize(damage, finalScale);
         }
 
+    }
+
+    public void StartEnemyDealingDamage()
+    {
+        isEnemyCanDealDamage = true;
+        Debug.Log($"{gameObject.name}: StartEnemyDealingDamage() Can deal damage: {isEnemyCanDealDamage}");
+    }
+    public void FinishEnemyDealingDamage()
+    {
+        isEnemyCanDealDamage = false;
+        dealtDamage.Clear();
+        Debug.Log($"{gameObject.name}: FinishEnemyDealingDamage() Can deal damage: {isEnemyCanDealDamage}");
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        foreach (Transform weapon in enemyWeapon)
+        {
+            Gizmos.DrawLine(weapon.position, weapon.position - (-weapon.up) * enemyWeaponRange);
+        }
+
+    }
+
+    #region Animation Method
+    private void ChangeMovementAnimatorParameters(bool isIdle, bool isWalking, bool isChasing)
+    {
+        animator.SetBool("isIdle", isIdle);
+        animator.SetBool("isMoving", isWalking);
+        animator.SetBool("isChasing", isChasing);
+    }
+    #endregion
+    private void CheckDealtDamage()
+    {
+        if (!isEnemyCanDealDamage) return;
+
+        foreach (Transform weapon in enemyWeapon)
+        {
+            Collider[] hits = Physics.OverlapSphere(weapon.position, enemyWeaponRange);
+
+            foreach (Collider hit in hits)
+            {
+                if (hit.gameObject == gameObject) continue;
+
+                if (!dealtDamage.Contains(hit.gameObject))
+                {
+                    var playerHealth = hit.GetComponent<PlayerHealthManager>();
+
+                    if (playerHealth != null)
+                    {
+                        dealtDamage.Add(hit.gameObject);
+
+                        playerHealth.ModfiyHealth(-currentActiveDamage);
+
+                        Debug.Log($"Player vuruldu! Hasar: {currentActiveDamage}");
+                    }
+                }
+            }
+        }
     }
 }
