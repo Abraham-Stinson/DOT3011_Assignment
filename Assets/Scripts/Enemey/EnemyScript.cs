@@ -317,13 +317,13 @@ public class EnemyScript : MonoBehaviour
     public void StartEnemyDealingDamage()
     {
         isEnemyCanDealDamage = true;
-        Debug.Log($"{gameObject.name}: StartEnemyDealingDamage() Can deal damage: {isEnemyCanDealDamage}");
+        //Debug.Log($"{gameObject.name}: StartEnemyDealingDamage() Can deal damage: {isEnemyCanDealDamage}");
     }
     public void FinishEnemyDealingDamage()
     {
         isEnemyCanDealDamage = false;
         dealtDamage.Clear();
-        Debug.Log($"{gameObject.name}: FinishEnemyDealingDamage() Can deal damage: {isEnemyCanDealDamage}");
+        //Debug.Log($"{gameObject.name}: FinishEnemyDealingDamage() Can deal damage: {isEnemyCanDealDamage}");
     }
 
     private void OnDrawGizmos()

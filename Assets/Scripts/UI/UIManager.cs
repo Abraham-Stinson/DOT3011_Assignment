@@ -1,5 +1,7 @@
+using Microsoft.Unity.VisualStudio.Editor;
 using Unity.VisualScripting;
 using UnityEngine;
+using Image = UnityEngine.UI.Image;
 
 public class UIManager : MonoBehaviour, IGameStateListener
 {
@@ -12,6 +14,9 @@ public class UIManager : MonoBehaviour, IGameStateListener
   [SerializeField] private GameObject pausePanel;
   [SerializeField] private GameObject gameOverWinPanel;
   [SerializeField] private GameObject gameOverLosePanel;
+
+  [Header("Player Health Bar In Game UI")]
+  [SerializeField] private Image playerHealthBarInGameUI;
 
   void Awake()
   {
@@ -47,4 +52,9 @@ public class UIManager : MonoBehaviour, IGameStateListener
     }
 
   }
+
+  public Image GetInGameHealthBar()
+    {
+        return playerHealthBarInGameUI;
+    }
 }

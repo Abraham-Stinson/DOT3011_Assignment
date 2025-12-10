@@ -36,8 +36,8 @@ ModelImporter:
       name: Jump_Attack
       takeName: mixamo.com
       internalID: -203655887218126122
-      firstFrame: 3
-      lastFrame: 168
+      firstFrame: 18
+      lastFrame: 207
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
