@@ -295,7 +295,11 @@ public class EnemyScript : MonoBehaviour
         {
             healthBar.SetActive(true);
         }
-        StartCoroutine(Stun());
+        if (afterTakeDamageIsEnemyGetStun)
+        {
+            StartCoroutine(Stun());
+        }
+
     }
     IEnumerator Stun()
     {
