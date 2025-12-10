@@ -52,7 +52,7 @@ public class PlayerHealthManager : MonoBehaviour
     {
         if (inGameHealthBar==null) return;
         
-        Debug.Log(health / maxHealth);
+        //Debug.Log(health / maxHealth);
         inGameHealthBar.fillAmount = Mathf.MoveTowards(inGameHealthBar.fillAmount, health / maxHealth, reduceSpeed * Time.deltaTime);
     }
 }

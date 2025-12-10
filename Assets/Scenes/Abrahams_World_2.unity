@@ -6121,7 +6121,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Goblin
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7033711029037266406, guid: 78230d655d22cf74c8f42e9ff7f72837,
+        type: 3}
+      propertyPath: afterTakeDamageIsEnemyGetStun
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7016284214441610271, guid: 78230d655d22cf74c8f42e9ff7f72837, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

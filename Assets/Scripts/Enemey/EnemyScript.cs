@@ -65,7 +65,10 @@ public class EnemyScript : MonoBehaviour
     private List<GameObject> dealtDamage;
     [SerializeField, Range(0f, 10f)] private float enemyWeaponRange;
     [SerializeField] private Transform[] enemyWeapon;
+    [SerializeField] private bool afterTakeDamageIsEnemyGetStun;
+    [SerializeField, Range(0, 5f)] private float stunTime = 1f;
     private float currentActiveDamage;
+    private float stunClipDuration;
     [Header("Attack Cooldown")]
     float lastClickedTime;
     float lastComboTime;
@@ -76,7 +79,7 @@ public class EnemyScript : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         isEnemyCanDesicion = true;
-        dealtDamage = new List<GameObject>(); // <--- EKLENMELİ
+        dealtDamage = new List<GameObject>();
     }
     void Start()
     {
@@ -88,8 +91,10 @@ public class EnemyScript : MonoBehaviour
         {
             FindPlayerGO();
         }*/
+
         FindPlayerGO();
         PickNewPatrolDirection();
+        UpdateStunClipDuration();
 
     }
 
@@ -274,7 +279,7 @@ public class EnemyScript : MonoBehaviour
 
     }*/
 
-    public void DealDamage(float damage)
+    public void DealDamage(float damage)//TAKEN DAMAGE
     {
         enemyHealth -= damage;
         Debug.Log("Enemy Dealed damage" + damage);
@@ -290,7 +295,23 @@ public class EnemyScript : MonoBehaviour
         {
             healthBar.SetActive(true);
         }
+        StartCoroutine(Stun());
+    }
+    IEnumerator Stun()
+    {
+        ChangeMovementAnimatorParameters(false, false, false);
+        isEnemyCanDesicion = false;
 
+        float multiplier = stunClipDuration / stunTime;
+
+        if (stunTime <= 0) multiplier = 1;
+
+        animator.SetFloat("stunSpeed", multiplier);
+        animator.SetTrigger("stun");
+
+        yield return new WaitForSeconds(stunTime);
+
+        isEnemyCanDesicion = true;
     }
 
     void ShowOnUI(float damage)
@@ -371,5 +392,28 @@ public class EnemyScript : MonoBehaviour
                 }
             }
         }
+    }
+    private void UpdateStunClipDuration()
+    {
+        if (animator == null || animator.runtimeAnimatorController == null) return;
+
+        // Animator'daki tüm klipleri bir diziye al
+        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+
+        foreach (AnimationClip clip in clips)
+        {
+            // Clip isminde "Stun" geçiyorsa veya adı tam olarak "Stun" ise
+            // (Küçük/büyük harf duyarlılığını kaldırmak için ToLower yapıyoruz)
+            if (clip.name.ToLower().Contains("stun"))
+            {
+                stunClipDuration = clip.length;
+                // Debug.Log($"Stun animasyonu bulundu: {clip.name}, Süresi: {stunClipDuration}");
+                return; // Bulduk, döngüden çık
+            }
+        }
+
+        // Eğer bulunamazsa hata vermemesi için varsayılan bir değer ata
+        Debug.LogWarning(gameObject.name + ": 'Stun' isminde bir animasyon klibi bulunamadı!");
+        stunClipDuration = 1f;
     }
 }
