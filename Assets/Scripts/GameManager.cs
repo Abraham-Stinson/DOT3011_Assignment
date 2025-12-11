@@ -20,17 +20,21 @@ public class GameManager : MonoBehaviour
         public string characterName;
         public GameObject characterPrefab;
         //public Sprite weaponIcon;
-        public PlayerStatisticsSO playerStatisticsSO;
     }
 
-    public CharacterData[] characters = new CharacterData[3];
+    [SerializeField] private CharacterData[] characters = new CharacterData[3];
 
     [SerializeField] private GameObject player;
     private GameObject freeLookCamera;
     public EGameState gameState;
 
     [SerializeField] public Transform spawnObjectParent;
+<<<<<<< Updated upstream
+=======
     public int currentHeroIndex;
+
+    [SerializeField] private GameObject skillTreeUI;
+>>>>>>> Stashed changes
     void Awake()
     {
         instance = this;
@@ -54,7 +58,22 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Tab)&&!skillTreeUI.gameObject.activeSelf)
+        {
+            
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            ActiveControl(false);
+            skillTreeUI.SetActive(!skillTreeUI.gameObject.activeSelf);
+            
+        }
+        else if (skillTreeUI.gameObject.activeSelf && Input.GetKeyDown(KeyCode.Tab))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            ActiveControl(true);
+            skillTreeUI.SetActive(!skillTreeUI.gameObject.activeSelf);
+        }
     }
 
     public void SetGameState(EGameState gameState)
@@ -113,7 +132,6 @@ public class GameManager : MonoBehaviour
 
     public void SpawnChrahterAtIndex(int index)
     {
-        currentHeroIndex = index;
         Debug.Log(characters[index].characterName + " spawned");
         player = Instantiate(characters[index].characterPrefab, spawnObjectParent.position, spawnObjectParent.rotation, spawnObjectParent.transform);
 

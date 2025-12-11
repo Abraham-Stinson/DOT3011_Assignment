@@ -5,13 +5,15 @@ using UnityEngine;
 
 public class LightBeamUltimate : MonoBehaviour
 {
-    [Header("Laser Settings")]
-    [SerializeField] private float laserRange = 50f;
-    [SerializeField] private float fireRate = 0.2f;
-    [SerializeField] private float laserDuration = 3f;
+    public FlashlightStatsBase statsRuntime;
+
+    private float _laserRange;
+    private float _laserCooldown;
+    private float _laserDuration;
+    private float _laserDamage;
 
     [Header("Windup Settings")]
-    [SerializeField] private float windUpTime = 1.5f;
+    private float _windUpTime;
     [SerializeField] private AnimationCurve windupCurve;  
 
     [Header("Line Renderer")]
@@ -29,6 +31,9 @@ public class LightBeamUltimate : MonoBehaviour
 
     [Header("Camera")]
     [SerializeField] private Camera playerCam;
+
+    [SerializeField] private GameObject hitEffectPrefab;
+    private GameObject hitVFX;
 
     // Internal
     private Transform firePoint;
@@ -76,6 +81,16 @@ public class LightBeamUltimate : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        statsRuntime = WeaponStatsManager.Instance.flashlightStatsRuntime;
+
+        _laserDuration = statsRuntime.ultimateDuration;
+        _laserRange = statsRuntime.ultimateRange;
+        _laserDamage = statsRuntime.ultimateDamage;
+        _laserCooldown = statsRuntime.ultimateCooldown;
+    }
+
     void Update()
     {
         if (isWindingUp) WindupLaser();
@@ -115,11 +130,11 @@ public class LightBeamUltimate : MonoBehaviour
     void WindupLaser()
     {
         windupTimer += Time.deltaTime;
-        float t = Mathf.Clamp01(windupTimer / windUpTime);
+        float t = Mathf.Clamp01(windupTimer / _windUpTime);
 
         float curve = windupCurve.Evaluate(t);
 
-        float distance = curve * laserRange;  // Extend beam from 0 to full length
+        float distance = curve * _laserRange;  // Extend beam from 0 to full length
 
         Vector3 start = firePoint.position;
         Vector3 end = start + playerCam.transform.forward * distance;
@@ -142,23 +157,37 @@ public class LightBeamUltimate : MonoBehaviour
         Ray ray = playerCam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, laserRange))
+        if (hitVFX != null)
+            hitVFX.transform.position = laserLine.GetPosition(1);
+
+        if (Physics.Raycast(ray, out hit, _laserRange))
         {
             laserLine.SetPosition(1, hit.point);
+
+            //spawning hit VFX
+            
+            if (hitVFX == null)
+                hitVFX = Instantiate(hitEffectPrefab, laserLine.GetPosition(1),Quaternion.identity);
         }
         else
         {
-            laserLine.SetPosition(1, ray.origin + ray.direction * laserRange);
+            laserLine.SetPosition(1, ray.origin + ray.direction * _laserRange);
+
+            if(hitVFX!=null)
+                Destroy(hitVFX);
         }
     }
 
     private IEnumerator StopLaserAfterDelay()
     {
-        yield return new WaitForSeconds(laserDuration);
+        yield return new WaitForSeconds(_laserDuration);
 
         isLaserActive = false;
         laserLine.enabled = false;
 
         Destroy(gameObject); // Destroy beam object after effect ends
+
+        if (hitVFX != null)
+            Destroy(hitVFX);
     }
 }
