@@ -158,10 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e899cfe63740c5408615a659752f485, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laserRange: 300
-  fireRate: 0.2
-  laserDuration: 3
-  windUpTime: 1.5
+  stats: {fileID: 11400000, guid: 24256ea819638ce46b984818b510831e, type: 2}
   windupCurve:
     serializedVersion: 2
     m_Curve:
@@ -217,3 +214,5 @@ MonoBehaviour:
   emissionPulse: 30
   pulseSpeed: 25
   playerCam: {fileID: 0}
+  hitEffectPrefab: {fileID: 2010217804087774048, guid: 58ea45e9f97a5614e8561f8938b06831,
+    type: 3}

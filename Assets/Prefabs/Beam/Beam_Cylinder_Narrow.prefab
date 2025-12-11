@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2806347135380866417}
   - component: {fileID: 6546078555918555357}
   m_Layer: 0
-  m_Name: Beam_Cylinder_Wide
+  m_Name: Beam_Cylinder_Narrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -119,36 +119,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe9f43376ff405047862c11caa0379e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 30
-  damage: 10
-  lifetime: 1.8
+  stats: {fileID: 11400000, guid: 24256ea819638ce46b984818b510831e, type: 2}
+  beamType: 0
   hitLayers:
     serializedVersion: 2
-    m_Bits: 8
-  expandOverDistance: 1
+    m_Bits: 200
   expansionAxes: {x: 1, y: 1, z: 0}
-  expansionMultiplier: 30
+  expansionMultiplier: 1.5
   scaleCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  hitEffectPrefab: {fileID: 859555890492016921, guid: fba398b7df8646c4eb63e46e09c40183,
+    type: 3}

@@ -86,7 +86,9 @@ public class ThirdPersonController : MonoBehaviour
 
         if (direction.magnitude >= 0.1f)
         {
-            animator.SetBool("isMoving", true);
+            if(animator!=null)
+                animator.SetBool("isMoving", true);
+
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
             float angel = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref rotationVelocity, rotationSmoothTime);
             transform.rotation = Quaternion.Euler(0f, angel, 0f);
@@ -114,7 +116,8 @@ public class ThirdPersonController : MonoBehaviour
         {
             gravity = jumpForce;
             characterController.Move(new Vector3(0, gravity, 0) * Time.deltaTime);
-            animator.SetBool("isJumping", true);
+            if (animator != null)
+                animator.SetBool("isJumping", true);
         }
 
         //Debug.DrawRay(transform.position, Vector3.down * 1.1f, Color.red); DEBUG RAY

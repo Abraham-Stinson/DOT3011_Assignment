@@ -29,6 +29,12 @@ public class GameManager : MonoBehaviour
     public EGameState gameState;
 
     [SerializeField] public Transform spawnObjectParent;
+<<<<<<< Updated upstream
+=======
+    public int currentHeroIndex;
+
+    [SerializeField] private GameObject skillTreeUI;
+>>>>>>> Stashed changes
     void Awake()
     {
         instance = this;
@@ -52,7 +58,22 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Tab)&&!skillTreeUI.gameObject.activeSelf)
+        {
+            
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            ActiveControl(false);
+            skillTreeUI.SetActive(!skillTreeUI.gameObject.activeSelf);
+            
+        }
+        else if (skillTreeUI.gameObject.activeSelf && Input.GetKeyDown(KeyCode.Tab))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            ActiveControl(true);
+            skillTreeUI.SetActive(!skillTreeUI.gameObject.activeSelf);
+        }
     }
 
     public void SetGameState(EGameState gameState)
