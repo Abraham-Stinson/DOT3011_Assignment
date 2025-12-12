@@ -1,4 +1,5 @@
 using Microsoft.Unity.VisualStudio.Editor;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using Image = UnityEngine.UI.Image;
@@ -17,6 +18,9 @@ public class UIManager : MonoBehaviour, IGameStateListener
 
   [Header("Player Health Bar In Game UI")]
   [SerializeField] private Image playerHealthBarInGameUI;
+  [Header("Player XP Bar In Game UI")]
+  [SerializeField] private Image playerXpBarInGameUI;
+  [SerializeField] private TextMeshProUGUI playerXpPointTextUI;
 
   void Awake()
   {
@@ -54,7 +58,16 @@ public class UIManager : MonoBehaviour, IGameStateListener
   }
 
   public Image GetInGameHealthBar()
-    {
-        return playerHealthBarInGameUI;
-    }
+  {
+    return playerHealthBarInGameUI;
+  }
+
+  public Image GetInGameXpBar()
+  {
+    return playerXpBarInGameUI;
+  }
+  public TextMeshProUGUI GetInGameLevelPointText()
+  {
+    return playerXpPointTextUI;
+  }
 }

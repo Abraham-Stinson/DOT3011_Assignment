@@ -64,7 +64,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.445838
+      - time: 0.5378241
         functionName: FinishEnemyDealingDamage
         data: 
         objectReferenceParameter: {instanceID: 0}

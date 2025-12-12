@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 80
   damage: 20
-  damageMultiplayer: 1
+  damageMultiplier: 1
+  xpMultiplier: 1
+  xpRequiredToLevelUp: 100

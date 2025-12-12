@@ -57,7 +57,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.2679589
+      - time: 0.33485788
         functionName: StartEnemyDealingDamage
         data: 
         objectReferenceParameter: {instanceID: 0}

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using Cinemachine;
 using Microsoft.Unity.VisualStudio.Editor;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -69,12 +70,16 @@ public class EnemyScript : MonoBehaviour
     [SerializeField, Range(0, 5f)] private float stunTime = 1f;
     private float currentActiveDamage;
     private float stunClipDuration;
+    private Coroutine currentStunCoroutine;
     [Header("Attack Cooldown")]
     float lastClickedTime;
-    float lastComboTime;
+    //float lastComboTime;
     int comboCounter;
     float maxCombatTime = 0.5f;
     float maxClickTime = 0.2f;
+    [Header("Xp Gave")]
+    [SerializeField] private GameObject xpAssetPrefab;
+    [SerializeField, Range(0.1f, 100f)] private float xpGave = 10f;
     void Awake()
     {
         animator = GetComponent<Animator>();
@@ -126,22 +131,6 @@ public class EnemyScript : MonoBehaviour
         if (GameManager.instance.gameState != EGameState.INGAME || !isEnemyCanDesicion) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerGO.transform.position);
-        //Debug.Log("Mesafe: " + distanceToPlayer);
-
-        if (distanceToPlayer > chaseRange)
-        {
-            currentState = State.idle;
-        }
-
-        else if (distanceToPlayer <= chaseRange && distanceToPlayer > attackRange)
-        {
-            currentState = State.chase;
-        }
-
-        else if (distanceToPlayer <= attackRange)
-        {
-            currentState = State.attack;
-        }
 
         switch (currentState)
         {
@@ -153,23 +142,27 @@ public class EnemyScript : MonoBehaviour
 
             case State.chase:
                 MoveToPlayer();
-                // BURASI ÖNEMLİ: Saldırıya geçiş
+
                 if (distanceToPlayer <= attackRange)
                 {
                     currentState = State.attack;
-                    // Saldırıya geçer geçmez hareket animasyonlarını sustur
                     ChangeMovementAnimatorParameters(false, false, false);
+                }
+                // DÜZELTME 2: Hysteresis (Tolerans) Eklendi
+                // Kovalamayı bırakması için menzilden biraz daha (örneğin +2 birim) uzaklaşması lazım.
+                // Bu, sınırda titremeyi engeller.
+                else if (distanceToPlayer > chaseRange + 2f)
+                {
+                    currentState = State.idle;
                 }
                 break;
 
             case State.attack:
                 Attack();
-                // BURASI ÖNEMLİ: Saldırıdan çıkış (Hysteresis)
-                // Oyuncu 3.0 birimden 3.1 birime çıktığı an koşmaya başlama.
-                // Biraz pay bırak (attackRange + 1f). Yani 4.0 birim uzaklaşana kadar saldırmaya devam etsin.
-                if (distanceToPlayer > attackRange + 1f)
+                if (distanceToPlayer > attackRange + 1f && !isEnemyCanDealDamage)
                 {
                     currentState = State.chase;
+                    FinishEnemyDealingDamage();
                 }
                 break;
         }
@@ -208,6 +201,7 @@ public class EnemyScript : MonoBehaviour
     }
     private void MoveToPlayer()
     {
+        if (isEnemyCanDealDamage) return;
         //approching to player
         Vector3 direction = playerGO.transform.position - transform.position;
         direction.y = 0;
@@ -232,29 +226,23 @@ public class EnemyScript : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
         }
 
-        if (Time.time - lastClickedTime > attackCooldown)
+        // DÜZELTME BURADA: && !isEnemyCanDealDamage eklendi.
+        // Artık hasar verme işlemi bitmeden yeni saldırı emri veremez.
+        if (Time.time - lastClickedTime > attackCooldown && !isEnemyCanDealDamage)
         {
-            // Saldırı Animasyonunu Başlat
-            // Listenin dışına taşmayı önle
             if (comboCounter >= enemyAttackSOs.Count) comboCounter = 0;
 
             var currentAttackData = enemyAttackSOs[comboCounter];
 
-            // Animator'a saldırı klibini yükle
             animator.runtimeAnimatorController = currentAttackData.animatorOV;
-
-            // Animasyonu ZORLA oynat
             animator.Play("Attack_1", 0, 0f);
 
-            // Hasarı ayarla
             currentActiveDamage = currentAttackData.damage;
 
             Debug.Log("Saldırı Yapıldı! Combo: " + comboCounter);
 
-            // Bir sonraki vuruş için sayacı ve zamanı güncelle
             lastClickedTime = Time.time;
 
-            // Combo sayacını artır (veya rastgele seç)
             if (isPatternRandom)
                 comboCounter = Random.Range(0, enemyAttackSOs.Count);
             else
@@ -279,7 +267,7 @@ public class EnemyScript : MonoBehaviour
 
     }*/
 
-    public void DealDamage(float damage)//TAKEN DAMAGE
+    public void DealDamage(float damage)
     {
         enemyHealth -= damage;
         Debug.Log("Enemy Dealed damage" + damage);
@@ -287,35 +275,74 @@ public class EnemyScript : MonoBehaviour
         ShowOnUI(damage);
         if (enemyHealth <= 0)
         {
-            Debug.Log("Düşman Öldü");
-            Destroy(gameObject);
+            Death();
+
+            return;
         }
 
         if (!healthBar.activeSelf)
         {
             healthBar.SetActive(true);
         }
+
         if (afterTakeDamageIsEnemyGetStun)
         {
-            StartCoroutine(Stun());
+            ApplyStun();
+        }
+    }
+    private void Death()
+    {
+        Debug.Log("Düşman Öldü");
+        ChangeMovementAnimatorParameters(false, false, false);
+        isEnemyCanDesicion = false;
+        FinishEnemyDealingDamage();
+        if (healthBar.activeSelf)
+        {
+            healthBar.SetActive(false);
+        }
+        animator.SetTrigger("death");
+    }
+    public void DestroyEnemy()
+    {
+        if (xpAssetPrefab != null)
+        {
+            Instantiate(xpAssetPrefab, transform.position, Quaternion.identity);
         }
 
+        Destroy(gameObject);
+    }
+    public void ApplyStun()
+    {
+        // DÜZELTME 1: Çakışmayı Önleme
+        // Eğer halihazırda işleyen bir Stun varsa onu durdur.
+        if (currentStunCoroutine != null)
+        {
+            StopCoroutine(currentStunCoroutine);
+        }
+        // Yeni Stun'ı başlat ve değişkene ata.
+        currentStunCoroutine = StartCoroutine(Stun());
     }
     IEnumerator Stun()
     {
         ChangeMovementAnimatorParameters(false, false, false);
         isEnemyCanDesicion = false;
 
-        float multiplier = stunClipDuration / stunTime;
+        // Eğer saldırı yaparken stun yerse, hasar vermeyi (box collider'ı) kapatmalıyız.
+        FinishEnemyDealingDamage();
 
+        float multiplier = stunClipDuration / stunTime;
         if (stunTime <= 0) multiplier = 1;
 
         animator.SetFloat("stunSpeed", multiplier);
+
+        // Trigger'ı resetlemek bazen faydalıdır, üst üste trigger birikmesin.
+        animator.ResetTrigger("stun");
         animator.SetTrigger("stun");
 
         yield return new WaitForSeconds(stunTime);
 
         isEnemyCanDesicion = true;
+        currentStunCoroutine = null; // Coroutine bitti, boşa çıkar.
     }
 
     void ShowOnUI(float damage)
@@ -343,11 +370,13 @@ public class EnemyScript : MonoBehaviour
     {
         isEnemyCanDealDamage = true;
         //Debug.Log($"{gameObject.name}: StartEnemyDealingDamage() Can deal damage: {isEnemyCanDealDamage}");
+        Debug.Log("StartEnemyDealingDamage: Başladı");
     }
     public void FinishEnemyDealingDamage()
     {
         isEnemyCanDealDamage = false;
         dealtDamage.Clear();
+        Debug.Log("FinishEnemyDealingDamage: Bitti");
         //Debug.Log($"{gameObject.name}: FinishEnemyDealingDamage() Can deal damage: {isEnemyCanDealDamage}");
     }
 
@@ -375,19 +404,21 @@ public class EnemyScript : MonoBehaviour
 
         foreach (Transform weapon in enemyWeapon)
         {
-            Collider[] hits = Physics.OverlapSphere(weapon.position, enemyWeaponRange);
+            Vector3 direction = weapon.up;
 
-            foreach (Collider hit in hits)
+            RaycastHit[] hits = Physics.RaycastAll(weapon.position, direction, enemyWeaponRange);
+
+            foreach (RaycastHit hit in hits)
             {
-                if (hit.gameObject == gameObject) continue;
+                if (hit.collider.gameObject == gameObject) continue;
 
-                if (!dealtDamage.Contains(hit.gameObject))
+                if (!dealtDamage.Contains(hit.collider.gameObject))
                 {
-                    var playerHealth = hit.GetComponent<PlayerHealthManager>();
+                    var playerHealth = hit.collider.GetComponent<PlayerHealthManager>();
 
                     if (playerHealth != null)
                     {
-                        dealtDamage.Add(hit.gameObject);
+                        dealtDamage.Add(hit.collider.gameObject);
 
                         playerHealth.ModfiyHealth(-currentActiveDamage);
 

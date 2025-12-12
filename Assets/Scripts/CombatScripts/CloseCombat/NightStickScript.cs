@@ -46,8 +46,8 @@ public class NightStickScript : WeaponBase
                     if (hit.transform.gameObject.GetComponent<EnemyScript>() != null)
                     {
                         var playerStatisticSO  = GameManager.instance.characters[GameManager.instance.currentHeroIndex].playerStatisticsSO;
-                        hit.transform.gameObject.GetComponent<EnemyScript>().DealDamage(playerStatisticSO.damage*playerStatisticSO.damageMultiplayer);
-                        Debug.Log($"Player StatisticSO: {playerStatisticSO.damage*playerStatisticSO.damageMultiplayer}");
+                        hit.transform.gameObject.GetComponent<EnemyScript>().DealDamage(playerStatisticSO.damage*playerStatisticSO.damageMultiplier);
+                        Debug.Log($"Player StatisticSO: {playerStatisticSO.damage*playerStatisticSO.damageMultiplier}");
                     }
 
 

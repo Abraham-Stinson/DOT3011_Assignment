@@ -1594,7 +1594,6 @@ GameObject:
   - component: {fileID: 1012057833202417472}
   - component: {fileID: 894245832225512398}
   - component: {fileID: 7033711029037266406}
-  - component: {fileID: 7016284214441610271}
   - component: {fileID: 3707874234084129845}
   - component: {fileID: 1543513631936661054}
   m_Layer: 7
@@ -1612,7 +1611,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6475514327369348805}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 67.48377, y: 0.5638851, z: 99.90255}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1685,33 +1684,11 @@ MonoBehaviour:
   enemyWeapon:
   - {fileID: 3708106064596223523}
   - {fileID: 7548207069196090683}
---- !u!54 &7016284214441610271
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6475514327369348805}
-  serializedVersion: 4
-  m_Mass: 10
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 80
-  m_CollisionDetection: 0
+  afterTakeDamageIsEnemyGetStun: 1
+  stunTime: 1
+  xpAssetPrefab: {fileID: 6350982004921644942, guid: 0f0f92c644e20f94589dfe066b480d21,
+    type: 3}
+  xpGave: 10
 --- !u!136 &3707874234084129845
 CapsuleCollider:
   m_ObjectHideFlags: 0
