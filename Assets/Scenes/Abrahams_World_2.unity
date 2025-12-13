@@ -243,13 +243,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   treeGO: {fileID: 764010962625030765, guid: 05289bfad0c9cc944ae1f958db60c348, type: 3}
   treeSpawnTransform: {fileID: 898221830}
-  museumArtifacts:
-  - {fileID: 1299532551}
-  - {fileID: 967310783}
-  museumArtifactsLevelName:
-  - sculptScene
-  - paintScene
-  cursedMaterial: {fileID: 2100000, guid: 524268e868bd24645a6f177275106017, type: 2}
+  levels:
+  - name: Sculpt Artifact
+    artifactParent: {fileID: 1299532551}
+    levelSceneName: sculptScene
+    specificCursedMaterial: {fileID: 2100000, guid: 524268e868bd24645a6f177275106017,
+      type: 2}
+  - name: Paint Artifact
+    artifactParent: {fileID: 967310783}
+    levelSceneName: paintScene
+    specificCursedMaterial: {fileID: 2100000, guid: 524268e868bd24645a6f177275106017,
+      type: 2}
+  defaultCursedMaterial: {fileID: 2100000, guid: 524268e868bd24645a6f177275106017,
+    type: 2}
   isPlayerGetFirstWin: 0
   currentLevelName: 
 --- !u!1 &114696615
@@ -16284,94 +16290,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 805708026}
   m_CullTransparentMesh: 1
---- !u!1001 &822754636
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4325130714437745934, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 33.806843
-      objectReference: {fileID: 0}
-    - target: {fileID: 4325130714437745934, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.3344296
-      objectReference: {fileID: 0}
-    - target: {fileID: 4325130714437745934, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 107.28004
-      objectReference: {fileID: 0}
-    - target: {fileID: 4325130714437745934, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4325130714437745934, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4325130714437745934, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4325130714437745934, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4325130714437745934, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4325130714437745934, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4325130714437745934, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6350982004921644942, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: m_Name
-      value: XpGainObject
-      objectReference: {fileID: 0}
-    - target: {fileID: 6958133495707432663, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: minSpeed
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6958133495707432663, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: pickupRange
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6958133495707432663, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: detectionRange
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6958133495707432663, guid: 0f0f92c644e20f94589dfe066b480d21,
-        type: 3}
-      propertyPath: accelerationFactor
-      value: 2
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 0f0f92c644e20f94589dfe066b480d21, type: 3}
 --- !u!1 &865439043
 GameObject:
   m_ObjectHideFlags: 0
@@ -22662,4 +22580,3 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 4778039973372135499}
-  - {fileID: 822754636}

@@ -20,6 +20,7 @@ public class EnemyScript : MonoBehaviour
     [Header("Health")]
     public float maxHealth = 100f;
     private float enemyHealth;
+    private bool isEnemyDying=false;
 
     [Header("Health Bar")]
     [SerializeField] private GameObject healthBar;
@@ -128,6 +129,7 @@ public class EnemyScript : MonoBehaviour
 
     private void DesicionAI()
     {
+        if(enemyHealth<=0 && isEnemyDying==false) Death(); //Sometimes enemy not death while after he take damage then suddenly attack
         if (GameManager.instance.gameState != EGameState.INGAME || !isEnemyCanDesicion) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerGO.transform.position);
@@ -292,6 +294,7 @@ public class EnemyScript : MonoBehaviour
     }
     private void Death()
     {
+        isEnemyDying=true;
         Debug.Log("Düşman Öldü");
         ChangeMovementAnimatorParameters(false, false, false);
         isEnemyCanDesicion = false;

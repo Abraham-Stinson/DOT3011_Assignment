@@ -42,7 +42,7 @@ public class XpGainObject : MonoBehaviour
         if (playerGO == null) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerGO.transform.position);
-        Debug.Log(distanceToPlayer);
+        //Debug.Log(distanceToPlayer);
         if (!isActive && isSpawnAnimationFinished)
         {
             if (distanceToPlayer <= detectionRange)

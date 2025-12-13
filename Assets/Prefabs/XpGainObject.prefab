@@ -51,10 +51,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forceMultiply: 2
   xpGain: 10
-  detectionRange: 7
+  detectionRange: 5
   pickupRange: 1
-  minSpeed: 1
-  accelerationFactor: 5
+  minSpeed: 0.5
+  accelerationFactor: 2
   delayBeforeCheck: 0.5
 --- !u!33 &8966339686110666238
 MeshFilter:

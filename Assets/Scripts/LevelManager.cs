@@ -16,10 +16,18 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Transform treeSpawnTransform;
     private GameObject tree;
     [Header("Museum Artifacts")]
-    [SerializeField] private GameObject[] museumArtifacts;
-    [SerializeField] private string[] museumArtifactsLevelName;
-    [SerializeField] private Material cursedMaterial;
     private bool isMuseumArtifactsCursed = false;
+    [System.Serializable]
+    public class LevelData
+    {
+        public string name;
+        public GameObject artifactParent; // old: museumArtifacts
+        public string levelSceneName;     // old: museumArtifactsLevelName
+        public Material specificCursedMaterial;
+    }
+    [Header("Level Configurations")]
+    [SerializeField] private List<LevelData> levels;
+    [SerializeField] private Material defaultCursedMaterial;
     [Header("Game Mechanic")]
     private Vector3 savedPlayerReturnPosition;
     [SerializeField] public bool isPlayerGetFirstWin = false;
@@ -35,7 +43,7 @@ public class LevelManager : MonoBehaviour
         }
         currentMainLevel = this.gameObject.scene.name;
         Debug.Log($"Level manager'a ait Suan ki levelin adi: {currentMainLevel}");
-        levelCount = museumArtifacts.Count();
+        levelCount = levels.Count;
         Debug.Log($"Toplam level sayisi: {levelCount}");
     }
     public void InstantiateTree()
@@ -49,28 +57,22 @@ public class LevelManager : MonoBehaviour
     {
         isMuseumArtifactsCursed = true;
         Debug.LogWarning("eserlerde bir gariplik var");
-        foreach (GameObject parents in museumArtifacts)
+        foreach (LevelData currentLevel in levels)
         {
-            Debug.Log(parents.transform.childCount);
-            int childCount = parents.transform.childCount;
+            GameObject parentGO = currentLevel.artifactParent;
+            if (parentGO == null) continue;
+            Debug.Log(parentGO.transform.childCount);
+
+            int childCount = parentGO.transform.childCount;
             int selectedArtifact = Random.Range(0, childCount);
             //Debug.Log($" {parents.name} iteminin secilen {parents.transform.GetChild(selectedArtifact).name}");
-            Debug.Log($"Random result: {selectedArtifact} name: {parents.transform.GetChild(selectedArtifact).name}");
-            parents.transform.GetChild(selectedArtifact).AddComponent<LevelObjectInteraction>();
-            parents.transform.GetChild(selectedArtifact).GetComponent<LevelObjectInteraction>().ChangeMaterialOfArtifact(cursedMaterial);
+            Transform selectedChild = parentGO.transform.GetChild(selectedArtifact);
 
-            switch (parents.name)
-            {
-                case "SculpParent":
-                    parents.transform.GetChild(selectedArtifact).GetComponent<LevelObjectInteraction>().AppendLevelName(museumArtifactsLevelName[0]);
-                    break;
-                case "PaintParent":
-                    parents.transform.GetChild(selectedArtifact).GetComponent<LevelObjectInteraction>().AppendLevelName(museumArtifactsLevelName[1]);
-                    break;
-                default:
-                    Debug.LogWarning("Spesifik bir item belirltmedi");
-                    break;
-            }
+            Debug.Log($"Random result: {selectedArtifact} name: {selectedChild.name}");
+            LevelObjectInteraction interaction = selectedChild.AddComponent<LevelObjectInteraction>();
+            interaction.ChangeMaterialOfArtifact(defaultCursedMaterial);
+
+            interaction.AppendLevelName(currentLevel.levelSceneName);//SWITCH CASE WAS REMOVED
 
         }
     }
@@ -131,7 +133,7 @@ public class LevelManager : MonoBehaviour
     }
     public void ReturnWithWinFromLevel()
     {
-        
+
         Debug.Log("Win");
         totalWinCount++;
         isPlayerGetFirstWin = true;
@@ -140,7 +142,7 @@ public class LevelManager : MonoBehaviour
         levelObjectInteraction.SetDefaultMaterial();
         Destroy(levelObjectInteraction.gameObject.GetComponent<LevelObjectInteraction>());
 
-        if(totalWinCount == levelCount)
+        if (totalWinCount == levelCount)
         {
             GameManager.instance.GameOverWin();
         }
