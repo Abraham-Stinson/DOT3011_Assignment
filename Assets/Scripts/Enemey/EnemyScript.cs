@@ -20,7 +20,7 @@ public class EnemyScript : MonoBehaviour
     [Header("Health")]
     public float maxHealth = 100f;
     private float enemyHealth;
-    private bool isEnemyDying=false;
+    private bool isEnemyDying = false;
 
     [Header("Health Bar")]
     [SerializeField] private GameObject healthBar;
@@ -129,7 +129,7 @@ public class EnemyScript : MonoBehaviour
 
     private void DesicionAI()
     {
-        if(enemyHealth<=0 && isEnemyDying==false) Death(); //Sometimes enemy not death while after he take damage then suddenly attack
+        if (enemyHealth <= 0 && isEnemyDying == false) Death(); //Sometimes enemy not death while after he take damage then suddenly attack
         if (GameManager.instance.gameState != EGameState.INGAME || !isEnemyCanDesicion) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerGO.transform.position);
@@ -228,27 +228,31 @@ public class EnemyScript : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
         }
 
-        // DÜZELTME BURADA: && !isEnemyCanDealDamage eklendi.
-        // Artık hasar verme işlemi bitmeden yeni saldırı emri veremez.
-        if (Time.time - lastClickedTime > attackCooldown && !isEnemyCanDealDamage)
+        // Mevcut saldırının verisini alıyoruz
+        var currentAttackData = enemyAttackSOs[comboCounter];
+
+        // DÜZELTME: Sabit attackCooldown yerine SO'dan gelen cooldown'ı kullanıyoruz
+        if (Time.time - lastClickedTime > currentAttackData.attackCooldown && !isEnemyCanDealDamage)
         {
-            if (comboCounter >= enemyAttackSOs.Count) comboCounter = 0;
+            if (enemyAttackSOs == null || enemyAttackSOs.Count == 0) return;
 
-            var currentAttackData = enemyAttackSOs[comboCounter];
-
+            // Animasyonu ve hasarı uygula
             animator.runtimeAnimatorController = currentAttackData.animatorOV;
             animator.Play("Attack_1", 0, 0f);
 
             currentActiveDamage = currentAttackData.damage;
-
-            Debug.Log("Saldırı Yapıldı! Combo: " + comboCounter);
-
             lastClickedTime = Time.time;
 
+            Debug.Log($"{currentAttackData.name} yapıldı. Bekleme süresi: {currentAttackData.attackCooldown}sn");
+
+            // Kombo sırasını ilerlet
             if (isPatternRandom)
                 comboCounter = Random.Range(0, enemyAttackSOs.Count);
             else
+            {
                 comboCounter++;
+                if (comboCounter >= enemyAttackSOs.Count) comboCounter = 0;
+            }
         }
     }
     /*private void ApprochingToThePlayer()
@@ -278,6 +282,10 @@ public class EnemyScript : MonoBehaviour
         if (enemyHealth <= 0)
         {
             Death();
+            if (SubLevelManager.instace != null)
+            {
+                SubLevelManager.instace.CheckEnemyList(gameObject);
+            }
 
             return;
         }
@@ -294,7 +302,7 @@ public class EnemyScript : MonoBehaviour
     }
     private void Death()
     {
-        isEnemyDying=true;
+        isEnemyDying = true;
         Debug.Log("Düşman Öldü");
         ChangeMovementAnimatorParameters(false, false, false);
         isEnemyCanDesicion = false;
@@ -309,7 +317,8 @@ public class EnemyScript : MonoBehaviour
     {
         if (xpAssetPrefab != null)
         {
-            Instantiate(xpAssetPrefab, transform.position, Quaternion.identity);
+            GameObject xpGainGameObject = Instantiate(xpAssetPrefab, transform.position, Quaternion.identity);
+            xpGainGameObject.GetComponent<XpGainObject>().xpGain = xpGave;
         }
 
         Destroy(gameObject);
@@ -329,8 +338,6 @@ public class EnemyScript : MonoBehaviour
     {
         ChangeMovementAnimatorParameters(false, false, false);
         isEnemyCanDesicion = false;
-
-        // Eğer saldırı yaparken stun yerse, hasar vermeyi (box collider'ı) kapatmalıyız.
         FinishEnemyDealingDamage();
 
         float multiplier = stunClipDuration / stunTime;
@@ -338,14 +345,13 @@ public class EnemyScript : MonoBehaviour
 
         animator.SetFloat("stunSpeed", multiplier);
 
-        // Trigger'ı resetlemek bazen faydalıdır, üst üste trigger birikmesin.
         animator.ResetTrigger("stun");
         animator.SetTrigger("stun");
-
         yield return new WaitForSeconds(stunTime);
 
+        animator.ResetTrigger("stun");
         isEnemyCanDesicion = true;
-        currentStunCoroutine = null; // Coroutine bitti, boşa çıkar.
+        currentStunCoroutine = null;
     }
 
     void ShowOnUI(float damage)

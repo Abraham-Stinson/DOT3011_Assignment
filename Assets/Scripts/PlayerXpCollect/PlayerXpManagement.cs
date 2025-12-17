@@ -36,10 +36,10 @@ public class PlayerXpManagement : MonoBehaviour
     void Update()
     {
         //FOR TESTING
-        /*if (Input.GetMouseButtonDown((int)MouseButton.Middle))
-         {
-             ModifyXp(10);
-         }*/
+        if (Input.GetMouseButtonDown((int)MouseButton.Middle))
+        {
+            ModifyXp(10);
+        }
         UpdateXpUI();
     }
     private void UpdateXpUI()
@@ -56,5 +56,10 @@ public class PlayerXpManagement : MonoBehaviour
             levelPoint++;
             playerXp -= xpReqToLvlUp;
         }
+    }
+    public void ResetXp()
+    {
+        playerXp = 0;
+        levelPoint = 0;
     }
 }

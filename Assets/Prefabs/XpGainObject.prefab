@@ -169,7 +169,7 @@ MonoBehaviour:
   forceMultiply: 2
   xpGain: 10
   detectionRange: 5
-  pickupRange: 0.5
+  pickupRange: 1
   minSpeed: 5
   accelerationFactor: 20
   delayBeforeCheck: 0.5

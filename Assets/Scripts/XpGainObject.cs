@@ -6,7 +6,7 @@ public class XpGainObject : MonoBehaviour
 {
     Rigidbody rb;
     [SerializeField] private float forceMultiply = 2f;
-    [SerializeField] private float xpGain = 10f;
+    public float xpGain;
 
     private GameObject playerGO;
 

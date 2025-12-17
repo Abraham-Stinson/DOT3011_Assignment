@@ -41,7 +41,21 @@ public class PlayerHealthManager : MonoBehaviour
     {
         if (health <= 0)
         {
-            KillPlayer();
+            if (LevelManager.instance.isPlayerGetFirstWin)
+            {
+                Debug.Log("Lose but not at all");
+
+                ResetAllStatsOfPlayer();//RESET ALL STATS
+                //LevelManager.instance.BackToTheFormerPosition();
+                LevelManager.instance.ReturnFromLevel();
+                LevelManager.instance.DestroyCurrentLevel();
+                LevelManager.instance.ReturnWithLoseFromLevel();
+            }
+            else
+            {
+                KillPlayer();
+            }
+
         }
     }
 
@@ -55,5 +69,11 @@ public class PlayerHealthManager : MonoBehaviour
 
         //Debug.Log(health / maxHealth);
         inGameHealthBar.fillAmount = Mathf.MoveTowards(inGameHealthBar.fillAmount, health / maxHealth, reduceSpeed * Time.deltaTime);
+    }
+    private void ResetAllStatsOfPlayer()
+    {
+        health = maxHealth;
+        PlayerXpManagement.instance.ResetXp();
+        //THERE WILL BE RESET SKILL TREE
     }
 }

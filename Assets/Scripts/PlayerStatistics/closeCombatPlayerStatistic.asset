@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: closeCombatPlayerStatistic
   m_EditorClassIdentifier: 
   maxHealth: 100
-  damage: 10
+  damage: 500
   damageMultiplier: 1
   xpMultiplier: 1
   xpRequiredToLevelUp: 100

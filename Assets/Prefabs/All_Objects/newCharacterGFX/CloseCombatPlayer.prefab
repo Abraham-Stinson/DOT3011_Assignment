@@ -1178,7 +1178,7 @@ GameObject:
   - component: {fileID: -3857857559577583308}
   m_Layer: 8
   m_Name: CloseCombatPlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1282,6 +1282,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ea6dca175d77d24dabc200332e39ad7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerXp: 0
+  xpMultiplier: 0
+  xpReqToLvlUp: 0
+  levelPoint: 0
+  inGameXpBarUI: {fileID: 0}
+  inGameLevelPointUI: {fileID: 0}
+  reduceSpeed: 2
 --- !u!1 &5145706061603184519
 GameObject:
   m_ObjectHideFlags: 0

@@ -76,6 +76,10 @@ public class LevelManager : MonoBehaviour
 
         }
     }
+    public void BackToTheFormerPosition()
+    {
+        ModifyFormerPositionForReturn(levelObjectInteraction.transform.position + (levelObjectInteraction.transform.forward * 3));
+    }
     public void ModifyFormerPositionForReturn(Vector3 playersPosition)
     {
         savedPlayerReturnPosition = playersPosition;
@@ -161,7 +165,7 @@ public class LevelManager : MonoBehaviour
         {
             //Respawn player to museum with lose
             Debug.Log("CLASSIC Lose Screen");
-            ModifyFormerPositionForReturn(levelObjectInteraction.transform.position + (levelObjectInteraction.transform.forward * 3));
+            BackToTheFormerPosition();
         }
     }
 

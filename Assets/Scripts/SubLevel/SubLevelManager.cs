@@ -8,6 +8,7 @@ using UnityEngine.AI;
 using Vector3 = UnityEngine.Vector3;
 using Quaternion = UnityEngine.Quaternion;
 using Unity.VisualScripting;
+using Cinemachine;
 
 
 public class SubLevelManager : MonoBehaviour
@@ -24,6 +25,9 @@ public class SubLevelManager : MonoBehaviour
     }
     [SerializeField] private List<SpawnEnemy> enemies;
     [SerializeField] private List<GameObject> allEnemyList = new List<GameObject>();
+
+    [Header ("Boss Trigger")]
+    [SerializeField] private Collider bossTrigerCollider;
     void Awake()
     {
         if (instace == null) instace = this;
@@ -53,11 +57,31 @@ public class SubLevelManager : MonoBehaviour
                 NavMeshHit hit;
                 if (NavMesh.SamplePosition(randomWorldPoint, out hit, 5f, NavMesh.AllAreas))
                 {
-                    GameObject newEnemy = Instantiate(selectedEnemyPrefab, hit.position, Quaternion.identity,transform);
+                    GameObject newEnemy = Instantiate(selectedEnemyPrefab, hit.position, Quaternion.identity, transform);
                     allEnemyList.Add(newEnemy);
                 }
 
             }
         }
+    }
+
+    public void CheckEnemyList(GameObject enemyGO)
+    {
+        if (allEnemyList.Contains(enemyGO))
+        {
+            allEnemyList.Remove(enemyGO);
+        }
+        //IF THERE WILL BE 1 ENEMY MAYBE ADD SOME FEEDBACK SOUND OR TEXT
+        if (allEnemyList.Count == 0)
+        {
+            Debug.LogWarning("BİTTİ");
+
+            //There will be a system of tp to level's boss
+            /*LevelManager.instance.ReturnFromLevel();
+            LevelManager.instance.DestroyCurrentLevel();
+            LevelManager.instance.ReturnWithWinFromLevel();*/
+        }
+
+
     }
 }
