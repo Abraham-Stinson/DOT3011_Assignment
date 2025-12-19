@@ -36,6 +36,7 @@ Transform:
   - {fileID: 8969993655251174491}
   - {fileID: 454078412853864788}
   - {fileID: 4091051492222069600}
+  - {fileID: 4363749293298273372}
   m_Father: {fileID: 8495831216576509149}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4631740376332619238
@@ -123,7 +124,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   narrowShooter: {fileID: 7703527981516224146}
   wideShooter: {fileID: 33391565530504301}
+  bombShooter: {fileID: 6487918260895083707}
   ultimateShooter: {fileID: 2146002981308096073}
+  secondaryAttackInput: {fileID: -3930050304364628365, guid: bebabafd5dd99ba4cb5682062dd3d01c,
+    type: 3}
+  firePoint: {fileID: 8969993655251174491}
+  aimLayerMask:
+    serializedVersion: 2
+    m_Bits: 201
+  maxAimDistance: 50
 --- !u!1 &1677004356554083680
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,7 +180,64 @@ MonoBehaviour:
   beamPrefab: {fileID: 6546078555918555357, guid: eeed65367e34306439a160d2ea4e60d9,
     type: 3}
   firePoint: {fileID: 8969993655251174491}
-  fireRate: 0.2
+--- !u!1 &1970572817436570801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4363749293298273372}
+  - component: {fileID: 6487918260895083707}
+  m_Layer: 0
+  m_Name: bomb_shooter
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4363749293298273372
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970572817436570801}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.492}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2596309195522095220}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6487918260895083707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970572817436570801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85b658bbdececd948b5ee8a60e4e059e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bombPrefab: {fileID: 2101214399748112146, guid: e88757f3e13ccc449ae126f4ad1df5d3,
+    type: 3}
+  firePoint: {fileID: 4363749293298273372}
+  lineWidth: 0.05
+  throwSpeed: 15
+  drag: 0
+  mass: 3
+  maxSteps: 30
+  timeStep: 0.1
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 137
+  activeMat: {fileID: 2100000, guid: 569a46d7798c26a4dae8c1bd432346ef, type: 2}
+  passiveMat: {fileID: 2100000, guid: 0e90f0987dbe77346ae769ef66262fa7, type: 2}
 --- !u!1 &3432496378622463290
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,7 +333,7 @@ GameObject:
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &454078412853864788
 Transform:
   m_ObjectHideFlags: 0
@@ -298,4 +364,3 @@ MonoBehaviour:
   beamPrefab: {fileID: 6546078555918555357, guid: adb27221555e0b845ba3510dde38ab03,
     type: 3}
   firePoint: {fileID: 454078412853864788}
-  fireRate: 1

@@ -25,3 +25,8 @@ MonoBehaviour:
   ultimateDuration: 5
   ultimateCooldown: 10
   ultimateWindUpTime: 1.5
+  bombDamage: 4
+  bombTick: 0.25
+  bombLifetime: 3.5
+  bombCooldown: 8
+  bombAmount: 1

@@ -56,6 +56,7 @@ public class ThirdPersonController : MonoBehaviour
     void Update()
     {
         ApplyGravity();
+        RotatePlayerToCamera();
         //MovementHandle();
         //JumpHandle();
         //InteractHandle();
@@ -72,38 +73,52 @@ public class ThirdPersonController : MonoBehaviour
         playerInputActions.Player.Disable();
     }
     #region Movement and TPS Camera
-    void MovementHandle()
+    private void MovementHandle()
     {
         if (isAttacking) return;
-        /*float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");*/
 
-        Vector2 movementInput = playerInputActions.Player.Movement.ReadValue<Vector2>();
-        float horizontal = movementInput.x;
-        float vertical = movementInput.y;
-        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+        Vector2 input = playerInputActions.Player.Movement.ReadValue<Vector2>();
+        Vector3 moveDir = new Vector3(input.x, 0f, input.y);
 
-
-        if (direction.magnitude >= 0.1f)
+        if (moveDir.magnitude >= 0.1f)
         {
-            if(animator!=null)
+            if (animator != null)
                 animator.SetBool("isMoving", true);
 
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
-            float angel = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref rotationVelocity, rotationSmoothTime);
-            transform.rotation = Quaternion.Euler(0f, angel, 0f);
+            // Move relative to camera
+            Vector3 camForward = cam.forward;
+            Vector3 camRight = cam.right;
 
-            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            characterController.Move(moveDir.normalized * speed * Time.deltaTime);
+            camForward.y = 0f;
+            camRight.y = 0f;
+
+            Vector3 finalMove =
+                camForward.normalized * moveDir.z +
+                camRight.normalized * moveDir.x;
+
+            characterController.Move(finalMove * speed * Time.deltaTime);
         }
         else
         {
             if (animator != null)
-            {
                 animator.SetBool("isMoving", false);
-            }
-
         }
+    }
+
+
+    private void RotatePlayerToCamera()
+    {
+        Vector3 camForward = cam.forward;
+        camForward.y = 0f; // ignore vertical tilt
+
+        if (camForward.sqrMagnitude < 0.001f) return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(camForward);
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            targetRotation,
+            Time.deltaTime / rotationSmoothTime
+        );
     }
     #endregion
     #region Jump
