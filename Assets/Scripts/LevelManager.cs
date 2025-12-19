@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cinemachine;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -35,6 +36,8 @@ public class LevelManager : MonoBehaviour
     private LevelObjectInteraction levelObjectInteraction;
     private int levelCount;
     private int totalWinCount;
+    [Header("Museum")]
+    [SerializeField] private GameObject museum;
     void Awake()
     {
         if (instance == null)
@@ -89,6 +92,7 @@ public class LevelManager : MonoBehaviour
 
     public void ReturnFromLevel()
     {
+        ActiveMuseum(true);
         var player = ThirdPersonController.instance;
         CharacterController cc = player.GetComponent<CharacterController>();
         if (cc != null)
@@ -167,6 +171,10 @@ public class LevelManager : MonoBehaviour
             Debug.Log("CLASSIC Lose Screen");
             BackToTheFormerPosition();
         }
+    }
+    public void ActiveMuseum(bool active)
+    {
+        museum.SetActive(active);
     }
 
 }

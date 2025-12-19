@@ -57,6 +57,7 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
         GameObject spawnObj = GameObject.Find("PlayerSpawnPoint");
         Vector3 targetPos = spawnObj.transform.position + new Vector3(0, tpPlayerPosY, 0);
 
+        LevelManager.instance.ActiveMuseum(false);
         CharacterController cc = player.GetComponent<CharacterController>();
         if (cc != null)
         {
