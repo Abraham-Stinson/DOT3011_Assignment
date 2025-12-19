@@ -23,4 +23,11 @@ public class FlashlightStatsBase : ScriptableObject
     public float ultimateDuration;
     public float ultimateCooldown;
     public float ultimateWindUpTime;
+
+    [Header("Light Bomb")]
+    public float bombDamage;
+    public float bombTick;
+    public float bombLifetime;
+    public float bombCooldown;
+    public int bombAmount;
 }

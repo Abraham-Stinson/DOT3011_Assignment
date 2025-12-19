@@ -10,7 +10,7 @@ using Image = UnityEngine.UI.Image;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
-public class EnemyScript : MonoBehaviour
+public class EnemyScript : MonoBehaviour, IDamageable
 {
 
 
@@ -189,7 +189,11 @@ public class EnemyScript : MonoBehaviour
 
     }*/
 
+<<<<<<< Updated upstream
     public void DealDamage(float damage)
+=======
+    public void TakeDamage(float damage)//TAKEN DAMAGE
+>>>>>>> Stashed changes
     {
         enemyHealth -= damage;
         Debug.Log("Enemy Dealed damage" + damage);

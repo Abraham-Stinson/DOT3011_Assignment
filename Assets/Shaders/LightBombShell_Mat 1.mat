@@ -51,12 +51,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _NoiseDensity: 2
+    - _HorizontalRotateSpeed: 3.5
+    - _NoiseDensity: 3.5
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _RotationSpeed: 1
-    - _SpikeAmplitude: 0.2
+    - _RotationSpeed: 5
+    - _SpikeAmplitude: 0.1
+    - _VerticalRotateSpeed: 5
     m_Colors:
-    - _RotationAxis: {r: -1, g: -1, b: -1, a: 0}
-    - _SpikeColor: {r: 0, g: 0.09824196, b: 2.9960785, a: 1}
+    - _RotationAxis: {r: -1, g: 1, b: 1, a: 0}
+    - _SpikeColor: {r: 2.0082736, g: 7.6007013, b: 9.947525, a: 1}
   m_BuildTextureStacks: []

@@ -44,7 +44,13 @@ public class NightStickScript : WeaponBase
                     dealtDamage.Add(hit.transform.gameObject);
                     if (hit.transform.gameObject.GetComponent<EnemyScript>() != null)
                     {
+<<<<<<< Updated upstream
                         hit.transform.gameObject.GetComponent<EnemyScript>().DealDamage(nightStickDamage);
+=======
+                        var playerStatisticSO  = GameManager.instance.characters[GameManager.instance.currentHeroIndex].playerStatisticsSO;
+                        hit.transform.gameObject.GetComponent<EnemyScript>().TakeDamage(playerStatisticSO.damage*playerStatisticSO.damageMultiplayer);
+                        Debug.Log($"Player StatisticSO: {playerStatisticSO.damage*playerStatisticSO.damageMultiplayer}");
+>>>>>>> Stashed changes
                     }
 
 

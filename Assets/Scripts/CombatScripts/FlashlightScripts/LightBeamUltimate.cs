@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LightBeamUltimate : MonoBehaviour
 {
-    public FlashlightStatsBase statsRuntime;
+    private FlashlightStatsBase statsRuntime;
 
     private float _laserRange;
     private float _laserCooldown;
