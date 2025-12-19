@@ -258,6 +258,7 @@ MonoBehaviour:
     type: 2}
   isPlayerGetFirstWin: 0
   currentLevelName: 
+  museum: {fileID: 0}
 --- !u!1 &114696615
 GameObject:
   m_ObjectHideFlags: 0
@@ -4288,16 +4289,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff9a7dc9bfe09b4b9e96ba43a82c09e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentCameraStyle: 0
+  cam: {fileID: 7175824088235378996}
   characterController: {fileID: 1764833590651927755}
   speed: 10
   rotationSmoothTime: 0.1
-  cam: {fileID: 7175824088235378996}
   gravity: 0
   jumpForce: 5
+  groundRange: 1.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  groundRange: 1.2
   camRange: 8
   camStartOffset: 3
   animator: {fileID: 0}

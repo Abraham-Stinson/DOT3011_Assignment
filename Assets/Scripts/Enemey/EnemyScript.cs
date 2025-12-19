@@ -273,11 +273,8 @@ public class EnemyScript : MonoBehaviour, IDamageable
 
     }*/
 
-<<<<<<< Updated upstream
-    public void DealDamage(float damage)
-=======
+
     public void TakeDamage(float damage)//TAKEN DAMAGE
->>>>>>> Stashed changes
     {
         enemyHealth -= damage;
         Debug.Log("Enemy Dealed damage" + damage);

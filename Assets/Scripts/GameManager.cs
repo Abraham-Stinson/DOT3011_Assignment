@@ -140,6 +140,17 @@ public class GameManager : MonoBehaviour
         ThirdPersonController.instance.GetAnimatorCompononet();
         GameObject heroNameUI = GameObject.Find("HeroName");
         heroNameUI.GetComponent<TextMeshProUGUI>().text = characters[index].characterName;
+        switch (index)
+        {
+            case 0://nighrstick cam
+                ThirdPersonController.instance.currentCameraStyle = ThirdPersonController.CameraStyle.Combat;
+                Debug.Log($"SpawnChrahterAtIndex() index: {index}: Kamera sistemi {ThirdPersonController.instance.currentCameraStyle} sistemine değiştri");
+                break;
+            case 1://beam cam
+                ThirdPersonController.instance.currentCameraStyle = ThirdPersonController.CameraStyle.Shooter;
+                Debug.Log($"SpawnChrahterAtIndex() index: {index}: Kamera sistemi {ThirdPersonController.instance.currentCameraStyle} sistemine değiştri");
+                break;
+        }
         ActiveControl(true);
         /*player.GetComponent<ThirdPersonController>().enabled = true;
         freeLookCamera.GetComponent<Cinemachine.CinemachineFreeLook>().enabled = true;
