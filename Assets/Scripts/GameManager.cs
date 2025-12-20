@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     public int currentHeroIndex;
 
-    [SerializeField] private GameObject skillTreeUI;
+    //[SerializeField] private GameObject skillTreeUI;
 
     void Awake()
     {

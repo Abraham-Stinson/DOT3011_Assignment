@@ -8,7 +8,8 @@ public enum EGameState
     GAMEINTRO = 1,
     CHRACTERSELECTION = 2,
     INGAME = 3,
-    PAUSE = 4,
-    GAMEOVERWIN = 5,
-    GAMEOVERLOSE = 6
+    INSKILLTREE = 4,
+    PAUSE = 5,
+    GAMEOVERWIN = 6,
+    GAMEOVERLOSE = 7
 }

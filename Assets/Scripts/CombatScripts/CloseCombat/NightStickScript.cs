@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class NightStickScript : WeaponBase
 {
@@ -10,24 +8,28 @@ public class NightStickScript : WeaponBase
 
     bool canDealDamage;
     List<GameObject> dealtDamage;
+    
+    private NightStickStatsBase statsRuntime;
     [SerializeField] float stickLenght;
-    [SerializeField] float nightStickDamage;
 
-
-    [Header("Combo")]
+    [Header("Combo Ayarları")]
     [SerializeField] private List<AttackSO> combo;
-    float lastClickedTime;
-    float lastComboTime;
-    int comboCounter;
+    [SerializeField] private float comboResetWindow = 1.0f;
+    
+    private int comboCounter;
+    private float nextAttackTime = 0f;
+    private float resetComboTime = 0f; 
 
-    float maxCombatTime = 0.5f;
-    float maxClickTime = 0.2f;
     void Start()
     {
         animator = GetComponentInParent<Animator>();
         canDealDamage = false;
         dealtDamage = new List<GameObject>();
 
+        if (WeaponStatsManager.Instance != null && WeaponStatsManager.Instance.nightStickStatsRuntime != null)
+        {
+            statsRuntime = WeaponStatsManager.Instance.nightStickStatsRuntime;
+        }
     }
 
     void Update()
@@ -35,84 +37,106 @@ public class NightStickScript : WeaponBase
         if (canDealDamage)
         {
             RaycastHit hit;
-            int layerMask = 1 << 7;
+            int layerMask = 1 << 7; // Enemy Layer
 
-            if (Physics.Raycast(transform.position, -(-transform.right), out hit, stickLenght, layerMask))
+            float currentLength = (statsRuntime != null) ? 2f : stickLenght;
+
+            if (Physics.Raycast(transform.position, -(-transform.right), out hit, currentLength, layerMask))
             {
                 if (!dealtDamage.Contains(hit.transform.gameObject))
                 {
                     dealtDamage.Add(hit.transform.gameObject);
-                    if (hit.transform.gameObject.GetComponent<EnemyScript>() != null)
+                    EnemyScript enemy = hit.transform.gameObject.GetComponent<EnemyScript>();
+                    if (enemy != null)
                     {
-                        var playerStatisticSO  = GameManager.instance.characters[GameManager.instance.currentHeroIndex].playerStatisticsSO;
-                        hit.transform.gameObject.GetComponent<EnemyScript>().TakeDamage(playerStatisticSO.damage*playerStatisticSO.damageMultiplier);
-                        Debug.Log($"Player StatisticSO: {playerStatisticSO.damage*playerStatisticSO.damageMultiplier}");
+                        var playerStats = GameManager.instance.characters[GameManager.instance.currentHeroIndex].playerStatisticsSO;
+                        
+                        // Hasar Hesaplama
+                        float weaponDamageMult = (statsRuntime != null) ? statsRuntime.damageMultiply : 1f;
+                        float totalDamage = playerStats.damage * playerStats.damageMultiplier * weaponDamageMult;
+                        
+                        enemy.TakeDamage(totalDamage);
                     }
-
-
                 }
             }
-
         }
-
-        ExitAttack();
-
+        
+        if (Time.time > resetComboTime && comboCounter > 0)
+        {
+           // comboCounter = 0; 
+        }
     }
+
     public override void MainAttack()
     {
-        if (Time.time - lastComboTime > maxCombatTime && comboCounter < combo.Count)
+        if (Time.time < nextAttackTime) return;
+
+        if (Time.time > resetComboTime)
         {
-            CancelInvoke("EndCombo");
-            if (Time.time - lastClickedTime >= maxClickTime)
+            comboCounter = 0;
+        }
+
+        PerformAttack();
+    }
+
+    private void PerformAttack()
+    {
+        if (combo.Count == 0) return;
+
+        AttackSO currentAttack = combo[comboCounter];
+        animator.runtimeAnimatorController = currentAttack.animatorOV;
+        animator.Play("Attack", 0, 0);
+
+        
+        float animDuration = GetClipLength(currentAttack.animatorOV);
+        
+        float cooldown = (statsRuntime != null) ? statsRuntime.attackCooldown : 0.5f;
+
+        nextAttackTime = Time.time + animDuration + cooldown;
+
+        resetComboTime = nextAttackTime + comboResetWindow;
+
+        comboCounter++;
+        if (comboCounter >= combo.Count)
+        {
+            comboCounter = 0;
+        }
+    }
+    private float GetClipLength(AnimatorOverrideController ov)
+    {
+        if (ov == null) return 1f; // Güvenlik
+
+        List<KeyValuePair<AnimationClip, AnimationClip>> overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+        ov.GetOverrides(overrides);
+
+        foreach (var pair in overrides)
+        {
+            if (pair.Value != null)
             {
-                animator.runtimeAnimatorController = combo[comboCounter].animatorOV;
-                animator.Play("Attack", 0, 0);
-                comboCounter++;
-
-                lastClickedTime = Time.time;
-
-                if (comboCounter > combo.Count)
-                {
-                    comboCounter = 0;
-                }
+                return pair.Value.length;
             }
-
         }
-    }
-    private void ExitAttack()
-    {
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
-        {
-            Invoke("EndCombo", 1);
-        }
-    }
-    private void EndCombo()
-    {
-        comboCounter = 0;
-        lastComboTime = Time.time;
-    }
-    public override void SecondaryAttack()
-    {
 
+        return 1f;
     }
+    
 
-    public override void UltimateAttack()
+    public override void SecondaryAttack()//Dash
     {
         
     }
+    public override void UltimateAttack() { }
 
     public void StartDealDamage()
     {
         canDealDamage = true;
         dealtDamage.Clear();
-        Debug.Log("Function: StartDealDamage() Can deal damage: " + canDealDamage);
     }
 
     public void EndDealDamage()
     {
         canDealDamage = false;
-        Debug.Log("Function: EndDealDamage() Can deal damage: " + canDealDamage);
-        ThirdPersonController.instance.isAttacking = false;
+        // ThirdPersonController.instance.isAttacking = false; // Gerekirse aç
     }
 
     private void OnDrawGizmos()
@@ -120,6 +144,4 @@ public class NightStickScript : WeaponBase
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, transform.position - (-transform.right) * stickLenght);
     }
-
-
 }
