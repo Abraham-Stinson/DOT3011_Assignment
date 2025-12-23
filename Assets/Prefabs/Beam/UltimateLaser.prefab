@@ -74,19 +74,19 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 96
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 4
+    widthMultiplier: 1
     widthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.08037186
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -158,8 +158,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e899cfe63740c5408615a659752f485, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: 24256ea819638ce46b984818b510831e, type: 2}
-  windupCurve:
+  thinWidth: 0.02
+  fullWidth: 1.5
+  expandTime: 1.5
+  widthExpandCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -172,47 +174,34 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
+      time: 0.8246439
+      value: 0.00079778023
+      inSlope: -0.016491806
+      outSlope: -0.016491806
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  laserLine: {fileID: 4185498012325735711}
-  widthCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      inWeight: 0.15338908
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      inSlope: -30.032452
+      outSlope: -30.032452
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.020948088
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  damageTick: 0.25
+  laserLine: {fileID: 4185498012325735711}
   beamMaterial: {fileID: 2100000, guid: 881facbaf2292d8489419e9ed4048403, type: 2}
   baseColor: {r: 1, g: 0.103773475, b: 0.103773475, a: 1}
   baseIntensity: 100
   emissionPulse: 30
   pulseSpeed: 25
+  playerSpeedDecrease: 3
   playerCam: {fileID: 0}
   hitEffectPrefab: {fileID: 2010217804087774048, guid: 58ea45e9f97a5614e8561f8938b06831,
     type: 3}

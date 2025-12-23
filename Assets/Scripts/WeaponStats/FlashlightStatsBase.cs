@@ -16,6 +16,7 @@ public class FlashlightStatsBase : ScriptableObject
     public float wideSpeed;
     public float wideLifetime;
     public float wideCooldown;
+    public float wideExpansionMultiplier;
 
     [Header("Ultimate Beam")]
     public float ultimateDamage;
@@ -23,6 +24,8 @@ public class FlashlightStatsBase : ScriptableObject
     public float ultimateDuration;
     public float ultimateCooldown;
     public float ultimateWindUpTime;
+    public float ultimateHeaviness;
+    public float ultimateCameraResistance;
 
     [Header("Light Bomb")]
     public float bombDamage;

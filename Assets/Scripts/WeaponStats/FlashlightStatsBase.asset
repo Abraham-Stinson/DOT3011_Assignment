@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1b3cd0ff55d1c34fab2b565f2b9a3de, type: 3}
   m_Name: FlashlightStatsBase
   m_EditorClassIdentifier: 
-  narrowDamage: 15
+  narrowDamage: 6
   narrowSpeed: 40
   narrowLifetime: 1
   narrowCooldown: 0.3
@@ -20,11 +20,14 @@ MonoBehaviour:
   wideSpeed: 25
   wideLifetime: 1.8
   wideCooldown: 1.5
-  ultimateDamage: 30
+  wideExpansionMultiplier: 30
+  ultimateDamage: 8
   ultimateRange: 300
   ultimateDuration: 5
   ultimateCooldown: 10
   ultimateWindUpTime: 1.5
+  ultimateHeaviness: 3
+  ultimateCameraResistance: 0.25
   bombDamage: 4
   bombTick: 0.25
   bombLifetime: 3.5

@@ -1,5 +1,8 @@
+using Microsoft.Unity.VisualStudio.Editor;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using Image = UnityEngine.UI.Image;
 
 public class UIManager : MonoBehaviour, IGameStateListener
 {
@@ -12,6 +15,13 @@ public class UIManager : MonoBehaviour, IGameStateListener
   [SerializeField] private GameObject pausePanel;
   [SerializeField] private GameObject gameOverWinPanel;
   [SerializeField] private GameObject gameOverLosePanel;
+
+  [Header("Player Health Bar In Game UI")]
+  [SerializeField] private Image playerHealthBarInGameUI;
+  [SerializeField] private Image playerHealthBarFadeUI;
+  [Header("Player XP Bar In Game UI")]
+  [SerializeField] private Image playerXpBarInGameUI;
+  [SerializeField] private TextMeshProUGUI playerXpPointTextUI;
 
   void Awake()
   {
@@ -46,5 +56,23 @@ public class UIManager : MonoBehaviour, IGameStateListener
       Cursor.visible = false;
     }
 
+  }
+
+  public Image GetInGameHealthBar()
+  {
+    return playerHealthBarInGameUI;
+  }
+    public Image GetInGameHealthBarFade()
+    {
+        return playerHealthBarFadeUI;
+    }
+
+    public Image GetInGameXpBar()
+  {
+    return playerXpBarInGameUI;
+  }
+  public TextMeshProUGUI GetInGameLevelPointText()
+  {
+    return playerXpPointTextUI;
   }
 }

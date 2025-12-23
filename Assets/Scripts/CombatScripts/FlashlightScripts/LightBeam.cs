@@ -19,7 +19,7 @@ public class LightBeam: MonoBehaviour
     [Tooltip("Defines which axes (X, Y, Z) the scaling will apply to. Use 1 for 'On' and 0 for 'Off'.")]
     public Vector3 expansionAxes = new Vector3(1, 0, 1); // Default to X and Z (width/height)
     [Tooltip("The maximum multiplier for the scale at the end of the curve.")]
-    public float expansionMultiplier = 1.5f;
+    private float _expansionMultiplier;
     [Tooltip("The curve evaluates the scale factor from 0 (start) to 1 (end of lifetime).")]
     public AnimationCurve scaleCurve = AnimationCurve.Linear(0, 0, 1, 1); // Changed default curve
 
@@ -58,6 +58,7 @@ public class LightBeam: MonoBehaviour
             _damage= statsRuntime.wideDamage;
             _lifetime = statsRuntime.wideLifetime;
             _cooldown = statsRuntime.wideCooldown;
+            _expansionMultiplier = statsRuntime.wideExpansionMultiplier;
         }
 
         Destroy(gameObject, _lifetime);
@@ -173,7 +174,7 @@ public class LightBeam: MonoBehaviour
         float timeProgress = distanceTraveled / (_speed * _lifetime);
         float curveValue = scaleCurve.Evaluate(timeProgress);
 
-        float finalScale = initialScale.x * (1f + curveValue * (expansionMultiplier - 1f));
+        float finalScale = initialScale.x * (1f + curveValue * (_expansionMultiplier - 1f));
 
         Vector3 newScale = initialScale;
         newScale.x = Mathf.Lerp(initialScale.x, finalScale, expansionAxes.x);

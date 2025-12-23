@@ -12,6 +12,7 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
     [SerializeField] private string loadToScene;
     [SerializeField] private float tpPlayerPosY = 3;
     private MeshRenderer meshRenderer;
+    private Material originalMaterial;
     private Material cursedMaterial;
 
 
@@ -56,6 +57,7 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
         GameObject spawnObj = GameObject.Find("PlayerSpawnPoint");
         Vector3 targetPos = spawnObj.transform.position + new Vector3(0, tpPlayerPosY, 0);
 
+        LevelManager.instance.ActiveMuseum(false);
         CharacterController cc = player.GetComponent<CharacterController>();
         if (cc != null)
         {
@@ -85,10 +87,15 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
         cursedMaterial = brokenMaterial;
         if (meshRenderer != null)
         {
+            if (originalMaterial == null)
+            {
+                originalMaterial = meshRenderer.material;
+            }
             Debug.Log($"{gameObject.name} lanetleniyor (Material ekleniyor)...");
-            List<Material> materialList = new List<Material>(meshRenderer.materials);
+            /*List<Material> materialList = new List<Material>(meshRenderer.materials);
             materialList.Add(brokenMaterial);
-            meshRenderer.materials = materialList.ToArray();
+            meshRenderer.materials = materialList.ToArray();*/
+            meshRenderer.material = cursedMaterial;
         }
         else
         {
@@ -97,7 +104,7 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
     }
     public void SetDefaultMaterial()
     {
-        if (meshRenderer != null)
+        /*if (meshRenderer != null)
         {
             List<Material> materialList = new List<Material>(meshRenderer.materials);
             bool materialFound = false;
@@ -119,6 +126,16 @@ public class LevelObjectInteraction : MonoBehaviour, IInteractable
         else
         {
             Debug.Log("Null");
+        }*/
+        if (meshRenderer != null && originalMaterial != null)
+        {
+            // Değişiklik 3: Yedeklediğimiz orijinal materyali geri yüklüyoruz.
+            meshRenderer.material = originalMaterial;
+            Debug.Log("Materyal normale döndü.");
+        }
+        else
+        {
+            Debug.LogWarning("Orijinal materyal bulunamadı veya renderer yok.");
         }
     }
 

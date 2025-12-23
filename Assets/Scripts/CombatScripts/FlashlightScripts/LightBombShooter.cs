@@ -46,6 +46,7 @@ public class LightBombShooter : MonoBehaviour, IBeam
         lineRenderer.staticShadowCaster = false;
 
         hudManager = FindAnyObjectByType<HUDManager>();
+        lastFireTime = -_bombCooldown;
     }
 
     public void Shoot(Vector3 origin, Vector3 direction)

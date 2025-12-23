@@ -1,5 +1,7 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,30 +9,48 @@ public class LightBeamUltimate : MonoBehaviour
 {
     private FlashlightStatsBase statsRuntime;
 
-    private float _laserRange;
-    private float _laserCooldown;
-    private float _laserDuration;
-    private float _laserDamage;
+    private float _laserRange => WeaponStatsManager.Instance.flashlightStatsRuntime.ultimateRange;
+    private float _laserDuration => WeaponStatsManager.Instance.flashlightStatsRuntime.ultimateDuration;
+    private float _laserDamage => WeaponStatsManager.Instance.flashlightStatsRuntime.ultimateDamage;
+    private float _ultimateHeaviness => WeaponStatsManager.Instance.flashlightStatsRuntime.ultimateHeaviness;
+    private float cameraResistanceMultiplier => WeaponStatsManager.Instance.flashlightStatsRuntime.ultimateCameraResistance;
 
-    [Header("Windup Settings")]
-    private float _windUpTime;
-    [SerializeField] private AnimationCurve windupCurve;  
+    [Header("Beam Width Settings")]
+    [SerializeField] private float thinWidth = 0.01f;
+    [SerializeField] private float fullWidth = 0.25f;
+    [SerializeField] private float expandTime = 0.07f;
+
+    [Header("Beam Width Curve")]
+    [SerializeField]
+    private AnimationCurve widthExpandCurve =
+    AnimationCurve.EaseInOut(0, 0, 1, 1);
+
+    [Header("Damage Tick")]
+    [SerializeField] private float damageTick = 0.25f;
+    private float damageTimer;
 
     [Header("Line Renderer")]
     [SerializeField] private LineRenderer laserLine;
-    [SerializeField] private AnimationCurve widthCurve;
 
     [Header("Material Flash Settings")]
-    [SerializeField] private Material beamMaterial;       // optional assign in inspector
-    [SerializeField] private Color baseColor=Color.red;
-    [SerializeField] private float baseIntensity = 1f;    // the steady/base emission intensity
-    [SerializeField] private float emissionPulse = 1f;    // pulse amplitude (how much it varies)
-    [SerializeField] private float pulseSpeed = 4f;       // pulse speed
+    [SerializeField] private Material beamMaterial;
+    [SerializeField] private Color baseColor = Color.red;
+    [SerializeField] private float baseIntensity = 1f;
+    [SerializeField] private float emissionPulse = 1f;
+    [SerializeField] private float pulseSpeed = 4f;
+
     private Material materialInstance;
     private static readonly int emissionID = Shader.PropertyToID("_EmissionColor");
 
+
     [Header("Camera")]
     [SerializeField] private Camera playerCam;
+    private CinemachineFreeLook freeLookCam;
+
+    private float baseXSpeed;
+    private float baseYSpeed;
+
+
 
     [SerializeField] private GameObject hitEffectPrefab;
     private GameObject hitVFX;
@@ -38,145 +58,167 @@ public class LightBeamUltimate : MonoBehaviour
     // Internal
     private Transform firePoint;
     private bool isLaserActive = false;
-    private bool isWindingUp = false;
-    private float windupTimer = 0f;
+    private float playerBaseSpeed;
+
+    #region Unity Methods
 
     private void Awake()
     {
         if (playerCam == null)
             playerCam = Camera.main;
 
+        if(freeLookCam==null)
+            freeLookCam=FindAnyObjectByType<CinemachineFreeLook>();
+
         if (laserLine == null)
             laserLine = GetComponent<LineRenderer>();
 
-        if (widthCurve != null)
-            laserLine.widthCurve = widthCurve;
+        SetupMaterial();
+        laserLine.enabled = false;
 
-        if (beamMaterial == null)
-        {
-            // try to take the material from LineRenderer (this creates an instance)
-            if (laserLine != null)
-            {
-                materialInstance = laserLine.material; // this returns instance - safe
-                baseColor=materialInstance.color;
-            }
-            else
-            {
-                Debug.LogWarning("No beamMaterial or laserLine found.");
-            }
-        }
-        else
-        {
-            // instantiate to avoid changing the original asset
-            materialInstance = Instantiate(beamMaterial);
-            if (laserLine != null)
-                laserLine.material = materialInstance;
-        }
+        statsRuntime = WeaponStatsManager.Instance.flashlightStatsRuntime;
 
-        if (materialInstance != null)
-        {
-            materialInstance.EnableKeyword("_EMISSION");
-            // initialize emission to baseColor * baseIntensity
-            materialInstance.SetColor(emissionID, baseColor * baseIntensity);
-        }
+        
     }
 
     private void Start()
     {
-        statsRuntime = WeaponStatsManager.Instance.flashlightStatsRuntime;
-
-        _laserDuration = statsRuntime.ultimateDuration;
-        _laserRange = statsRuntime.ultimateRange;
-        _laserDamage = statsRuntime.ultimateDamage;
-        _laserCooldown = statsRuntime.ultimateCooldown;
+        
     }
 
     void Update()
     {
-        if (isWindingUp) WindupLaser();
-        else if (isLaserActive) UpdateLaser();
+        if (isLaserActive)
+            UpdateLaser();
     }
 
     private void LateUpdate()
     {
-        if (materialInstance == null || laserLine == null || !laserLine.enabled) return;
-
-        // produce a sine from -1..1, then scale by pulse amplitude
-        float sine = Mathf.Sin(Time.time * pulseSpeed); // -1 .. 1
-        float intensity = baseIntensity + sine * emissionPulse; // base ± pulse
-
-        // prevent negative intensity
-        intensity = Mathf.Max(0f, intensity);
-
-        // set HDR emission color = baseColor * intensity
-        Color emission = baseColor * intensity;
-        materialInstance.SetColor(emissionID, emission);
+        UpdateEmissionPulse();
     }
 
+    #endregion
+
+    #region Setup
+
+    private void SetupMaterial()
+    {
+        if (beamMaterial == null)
+        {
+            materialInstance = laserLine.material;
+            baseColor = materialInstance.color;
+        }
+        else
+        {
+            materialInstance = Instantiate(beamMaterial);
+            laserLine.material = materialInstance;
+        }
+
+        materialInstance.EnableKeyword("_EMISSION");
+        materialInstance.SetColor(emissionID, baseColor * baseIntensity);
+    }
+    #endregion
+
+    #region Laser Logic
     public void InitiateLaser(Transform firePoint)
     {
         this.firePoint = firePoint;
 
-        // Begin windup
-        isWindingUp = true;
-        windupTimer = 0f;
-
-        // Prepare laser line
         laserLine.enabled = true;
         laserLine.positionCount = 2;
 
+        // Start ultra-thin (energy gathered)
+        laserLine.startWidth = thinWidth;
+        laserLine.endWidth = thinWidth;
+
+        if (freeLookCam != null)
+        {
+            baseXSpeed = freeLookCam.m_XAxis.m_MaxSpeed;
+            baseYSpeed = freeLookCam.m_YAxis.m_MaxSpeed;
+
+            freeLookCam.m_XAxis.m_MaxSpeed *= cameraResistanceMultiplier;
+            freeLookCam.m_YAxis.m_MaxSpeed *= cameraResistanceMultiplier;
+        }
+
+        isLaserActive = true;
+
+        StartCoroutine(ExpandLaserWidth());
+        StartCoroutine(StopLaserAfterDelay());
     }
 
-    void WindupLaser()
+    private IEnumerator ExpandLaserWidth()
     {
-        windupTimer += Time.deltaTime;
-        float t = Mathf.Clamp01(windupTimer / _windUpTime);
+        float t = 0f;
 
-        float curve = windupCurve.Evaluate(t);
+        while (t < expandTime)
+        {
+            t += Time.deltaTime;
+            float normalized = Mathf.Clamp01(t / expandTime);
 
-        float distance = curve * _laserRange;  // Extend beam from 0 to full length
+            float curveValue = widthExpandCurve.Evaluate(normalized);
+            float width = Mathf.Lerp(thinWidth, fullWidth, curveValue);
 
+            laserLine.startWidth = width;
+            laserLine.endWidth = width * 0.85f;
+
+            yield return null;
+        }
+
+        ThirdPersonController controller = FindAnyObjectByType<ThirdPersonController>();
+        playerBaseSpeed = controller.GetPlayerSpeed();
+
+        float newSpeed = controller.GetPlayerSpeed() / _ultimateHeaviness;
+        controller.SetPlayerSpeed(newSpeed);
+
+        laserLine.startWidth = fullWidth;
+        laserLine.endWidth = fullWidth * 0.85f;
+    }
+
+
+    private void UpdateLaser()
+    {
+        Vector3 camPos = playerCam.transform.position;
+        Vector3 camDir = playerCam.transform.forward;
+
+        // 1. Find visual endpoint (first hit only)
+        Vector3 endPoint = camPos + camDir * _laserRange;
+
+        if (Physics.Raycast(camPos, camDir, out RaycastHit firstHit, _laserRange))
+        {
+            endPoint = firstHit.point;
+        }
+
+        // 2. Set laser positions
         Vector3 start = firePoint.position;
-        Vector3 end = start + playerCam.transform.forward * distance;
-
         laserLine.SetPosition(0, start);
-        laserLine.SetPosition(1, end);
+        laserLine.SetPosition(1, endPoint);
 
-        if (t >= 1f)
+        // 3. Piercing damage (RaycastAll)
+        damageTimer += Time.deltaTime;
+
+        if (damageTimer >= damageTick)
         {
-            isWindingUp = false;
-            isLaserActive = true;
-            StartCoroutine(StopLaserAfterDelay());
+            damageTimer = 0f;
+
+            RaycastHit[] hits = Physics.RaycastAll(camPos, camDir, _laserRange);
+            foreach (RaycastHit hit in hits)
+            {
+                hit.collider.GetComponent<IDamageable>()
+                    ?.TakeDamage(_laserDamage);
+            }
         }
-    }
 
-    void UpdateLaser()
-    {
-        laserLine.SetPosition(0, firePoint.position);
-
-        Ray ray = playerCam.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (hitVFX != null)
-            hitVFX.transform.position = laserLine.GetPosition(1);
-
-        if (Physics.Raycast(ray, out hit, _laserRange))
+        // 4. Hit VFX at visual endpoint
+        if (hitEffectPrefab != null)
         {
-            laserLine.SetPosition(1, hit.point);
-
-            //spawning hit VFX
-            
             if (hitVFX == null)
-                hitVFX = Instantiate(hitEffectPrefab, laserLine.GetPosition(1),Quaternion.identity);
-        }
-        else
-        {
-            laserLine.SetPosition(1, ray.origin + ray.direction * _laserRange);
-
-            if(hitVFX!=null)
-                Destroy(hitVFX);
+                hitVFX = Instantiate(hitEffectPrefab, endPoint, Quaternion.identity);
+            else
+                hitVFX.transform.position = endPoint;
         }
     }
+
+
 
     private IEnumerator StopLaserAfterDelay()
     {
@@ -185,9 +227,34 @@ public class LightBeamUltimate : MonoBehaviour
         isLaserActive = false;
         laserLine.enabled = false;
 
-        Destroy(gameObject); // Destroy beam object after effect ends
+        ThirdPersonController controller = FindAnyObjectByType<ThirdPersonController>();
+        controller.SetPlayerSpeed(playerBaseSpeed);
+
+        if (freeLookCam != null)
+        {
+            freeLookCam.m_XAxis.m_MaxSpeed = baseXSpeed;
+            freeLookCam.m_YAxis.m_MaxSpeed = baseYSpeed;
+        }
 
         if (hitVFX != null)
             Destroy(hitVFX);
+
+        Destroy(gameObject);
     }
+    #endregion
+
+    #region Visuals
+
+    private void UpdateEmissionPulse()
+    {
+        if (materialInstance == null || !laserLine.enabled)
+            return;
+
+        float sine = Mathf.Sin(Time.time * pulseSpeed);
+        float intensity = Mathf.Max(0f, baseIntensity + sine * emissionPulse);
+
+        materialInstance.SetColor(emissionID, baseColor * intensity);
+    }
+
+    #endregion
 }

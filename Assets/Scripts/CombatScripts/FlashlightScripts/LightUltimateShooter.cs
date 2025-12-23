@@ -11,9 +11,6 @@ public class LightUltimateShooter : MonoBehaviour, IBeam
     private float lastFireTime;
     private float _cooldown => WeaponStatsManager.Instance.flashlightStatsRuntime.ultimateCooldown;
 
-    private bool isOnCooldown = false;
-    private bool isActive = false;
-
     LightBeamUltimate spawnedLaser;
 
     private HUDManager hudManager;
@@ -37,6 +34,7 @@ public class LightUltimateShooter : MonoBehaviour, IBeam
     private void Awake()
     {
         hudManager = FindAnyObjectByType<HUDManager>();
+        lastFireTime = -_cooldown;
     }
     
 }

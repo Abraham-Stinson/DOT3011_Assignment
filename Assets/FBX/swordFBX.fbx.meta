@@ -3,7 +3,22 @@ guid: 31beba95769d8c344a233ffa4f9d1a40
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Leather
+    second: {fileID: 2100000, guid: 972f27037bbf881458fc5dc43ebd4ef0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Steel
+    second: {fileID: 2100000, guid: d8e33301be66d0941a00cae10d10f5e1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Sword_1_Hilt_ Handle
+    second: {fileID: 2100000, guid: c486c1175f247a84287f3b814e1d8e02, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
