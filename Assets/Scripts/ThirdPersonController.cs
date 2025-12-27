@@ -204,7 +204,7 @@ public class ThirdPersonController : MonoBehaviour
 
     public void MenuToggle(InputAction.CallbackContext context)
     {
-        // UIManager.instance.PauseMenuToggle();
+        UIManager.instance.PauseMenuToggle();
     }
 
     public void MainAttack(InputAction.CallbackContext context)

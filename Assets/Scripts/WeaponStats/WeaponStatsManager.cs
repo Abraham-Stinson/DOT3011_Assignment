@@ -10,6 +10,10 @@ public class WeaponStatsManager : MonoBehaviour
 
     public FlashlightStatsBase flashlightStatsRuntime;
 
+    [Header("NightStick")]
+    [SerializeField] private NightStickStatsBase nightStickStatsBase;
+    public NightStickStatsBase nightStickStatsRuntime;
+
     private void Awake()
     {
         if (Instance != null)
@@ -21,6 +25,19 @@ public class WeaponStatsManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        flashlightStatsRuntime = Instantiate(flashlightStatsBase);
+
+        if (flashlightStatsRuntime != null)
+        {
+            flashlightStatsRuntime = Instantiate(flashlightStatsBase);
+        }
+
+        if (nightStickStatsBase != null)
+        {
+            nightStickStatsRuntime = Instantiate(nightStickStatsBase);
+        }
+        else
+        {
+            Debug.LogError("WeaponStatsManager: NightStickStatsBase atanmamış!");
+        }
     }
 }
