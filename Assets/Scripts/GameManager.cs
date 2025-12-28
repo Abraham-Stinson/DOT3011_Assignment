@@ -88,10 +88,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /*public void GameIntro()
+    public void GameIntro()
     {
         SetGameState(EGameState.GAMEINTRO);
-    }*/
+    }
 
     public void ToMainMenu()
     {

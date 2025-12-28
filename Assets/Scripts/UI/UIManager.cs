@@ -31,7 +31,7 @@ public class UIManager : MonoBehaviour, IGameStateListener
   public void GameStateChangedCallBack(EGameState gameState)
   {
     menuPanel.SetActive(gameState == EGameState.MAINMENU);
-    //gameIntro.SetActive(gameState == EGameState.GAMEINTRO);
+    gameIntro.SetActive(gameState == EGameState.GAMEINTRO);
     characterSelectionPanel.SetActive(gameState == EGameState.CHRACTERSELECTION);
     inGamePanel.SetActive(gameState == EGameState.INGAME);
     skillTreePanel.SetActive(gameState == EGameState.INSKILLTREE);
