@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 05ec4421d1f985845b30076d3e2aa4ac
+guid: cd91b884fb034b34f8144034c39a71cc
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,17 +34,17 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
+    wrapU: 1
+    wrapV: 1
     wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
-  spriteExtrude: 0
+  spriteMode: 1
+  spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -95,69 +95,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: Skill_Tree_Export001_0
-      rect:
-        serializedVersion: 2
-        x: 47
-        y: 196
-        width: 750
-        height: 458
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -375, y: -229}
-        - {x: -375, y: -10}
-        - {x: -225, y: 229}
-        - {x: 135, y: 229}
-        - {x: 375, y: -34}
-        - {x: 375, y: -229}
-      physicsShape:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
-      tessellationDetail: 0
-      bones: []
-      spriteID: c5c82e623e8c7be43adb35b594cef8b3
-      internalID: -878376215
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Skill_Tree_Export001_1
-      rect:
-        serializedVersion: 2
-        x: 204
-        y: 0
-        width: 1605
-        height: 966
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 802.5, y: -483}
-        - {x: 802.5, y: 483}
-        - {x: -386.5, y: 483}
-        - {x: -420.5, y: 212}
-        - {x: -190.5, y: -92}
-        - {x: -201.5, y: -483}
-      physicsShape:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
-      tessellationDetail: 0
-      bones: []
-      spriteID: f788511143dcaed43991179408ff69d5
-      internalID: -885023768
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -168,9 +106,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      Skill_Tree_Export001_0: -878376215
-      Skill_Tree_Export001_1: -885023768
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

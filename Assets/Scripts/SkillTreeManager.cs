@@ -17,10 +17,25 @@ public class SkillTreeManager : MonoBehaviour
 
     private List<string> upgradeCodes = new List<string>
     {
+        //Flashlight
         "WideUpgrade_01",
         "WideUpgrade_02",
         "WideUpgrade_03",
         "WideUpgrade_04",
+        "WideUpgrade_05",
+        "WideUpgrade_06",
+        "WideUpgrade_07",
+        "WideUpgrade_08",
+
+        "BombUpgrade_01",
+        "BombUpgrade_02",
+        "BombUpgrade_03",
+        "BombUpgrade_04",
+        "BombUpgrade_05",
+        "BombUpgrade_06",
+        "BombUpgrade_07",
+        "BombUpgrade_08",
+
         //Night Stick
         "StickUpgrade_Damage",
         "StickUpgrade_Range",
@@ -32,7 +47,23 @@ public class SkillTreeManager : MonoBehaviour
     private Dictionary<string, System.Action> upgradeActions;
     private List<string> flashlightUpgrades = new List<string>
     {
-        "WideUpgrade_01", "WideUpgrade_02", "WideUpgrade_03", "WideUpgrade_04"
+        "WideUpgrade_01",
+        "WideUpgrade_02",
+        "WideUpgrade_03",
+        "WideUpgrade_04",
+        "WideUpgrade_05",
+        "WideUpgrade_06",
+        "WideUpgrade_07",
+        "WideUpgrade_08",
+
+        "BombUpgrade_01",
+        "BombUpgrade_02",
+        "BombUpgrade_03",
+        "BombUpgrade_04",
+        "BombUpgrade_05",
+        "BombUpgrade_06",
+        "BombUpgrade_07",
+        "BombUpgrade_08",
     };
     private List<string> nightStickUpgrades = new List<string>
     {
@@ -67,26 +98,35 @@ public class SkillTreeManager : MonoBehaviour
         {
             // --- FLASHLIGHT ---
             { "WideUpgrade_01", () => flashlightStatsRuntime.wideDamage *= 1.1f },
-            { "WideUpgrade_02", () => flashlightStatsRuntime.wideLifetime *= 1.2f },
-            { "WideUpgrade_03", () => flashlightStatsRuntime.wideCooldown /= 1.15f },
-            { "WideUpgrade_04", () =>
-                { 
-                    flashlightStatsRuntime.wideSpeed *= 2f;
-                    flashlightStatsRuntime.wideExpansionMultiplier*=2f;
-                } 
-            },
+            { "WideUpgrade_02", () => flashlightStatsRuntime.wideDamage *= 1.15f },
+            { "WideUpgrade_03", () => flashlightStatsRuntime.wideExpansionMultiplier *= 1.15f },
+            { "WideUpgrade_04", () => flashlightStatsRuntime.wideLifetime*=1.15f },
+            { "WideUpgrade_05", () => flashlightStatsRuntime.wideDamage *= 1.2f },
+            { "WideUpgrade_06", () => flashlightStatsRuntime.wideExpansionMultiplier *= 1.2f },
+            { "WideUpgrade_07", () => flashlightStatsRuntime.wideCooldown/=1.2f},
+            { "WideUpgrade_08", () => flashlightStatsRuntime.wideLifetime *= 1.2f },
+
+            { "BombUpgrade_01", () => flashlightStatsRuntime.bombDamage *= 1.1f },
+            { "BombUpgrade_02", () => flashlightStatsRuntime.bombAmount += 1 },
+            { "BombUpgrade_03", () => flashlightStatsRuntime.bombDamage *= 1.15f },
+            { "BombUpgrade_04", () => flashlightStatsRuntime.bombAmount += 1 },
+            { "BombUpgrade_05", () => flashlightStatsRuntime.bombTick /= 1.1f },
+            { "BombUpgrade_06", () => flashlightStatsRuntime.bombCooldown /= 1.15f },
+            { "BombUpgrade_07", () => flashlightStatsRuntime.bombLifetime *=1.15f },
+            { "BombUpgrade_08", () => flashlightStatsRuntime.bombLifetime *= 1.25f },
             
             // --- NIGHTSTICK ---
             { "StickUpgrade_Damage", () => nightStickStatsRuntime.damageMultiply *= 1.2f },
             { "StickUpgrade_Combo",  () => Debug.Log("Combo Upgrade") }
         };
-
+        
         upgradeCosts = new Dictionary<string, int>()
         {
             { "WideUpgrade_01", 1 },
             { "WideUpgrade_02", 1 },
             { "WideUpgrade_03", 2 },
-            { "WideUpgrade_04", 3 },
+            { "WideUpgrade_04", 1 },
+
 
             { "StickUpgrade_Damage", 1 },
             { "StickUpgrade_Combo", 1 },
