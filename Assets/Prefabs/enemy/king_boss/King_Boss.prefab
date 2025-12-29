@@ -542,6 +542,9 @@ MonoBehaviour:
   healthBar: {fileID: 1453061720981143775}
   healthBarImage: {fileID: 7928091331328773783}
   reduceSpeed: 2
+  healthBarFadeImage: {fileID: 0}
+  fadeDelay: 0.4
+  fadeSpeed: 1.5
   playerGO: {fileID: 0}
   patrolMinTime: 1
   patrolMaxTime: 3
@@ -576,6 +579,7 @@ MonoBehaviour:
   xpAssetPrefab: {fileID: 6350982004921644942, guid: 0f0f92c644e20f94589dfe066b480d21,
     type: 3}
   xpGave: 100
+  isEnemyABoss: 1
 --- !u!136 &766696892277433561
 CapsuleCollider:
   m_ObjectHideFlags: 0

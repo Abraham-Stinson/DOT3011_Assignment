@@ -635,21 +635,24 @@ MonoBehaviour:
     - {fileID: 410704526}
     Enemies:
     - {fileID: 6475514327369348805, guid: 78230d655d22cf74c8f42e9ff7f72837, type: 3}
-    amountOfSpawn: 3
+    - {fileID: 3877234488986251424, guid: 9fd6fb9f24cdb2c44ac3aa9147429a13, type: 3}
+    amountOfSpawn: 5
   - name: The Camp
     spawnArea:
     - {fileID: 1576325971}
     Enemies:
     - {fileID: 6475514327369348805, guid: 78230d655d22cf74c8f42e9ff7f72837, type: 3}
-    amountOfSpawn: 3
+    - {fileID: 3877234488986251424, guid: 9fd6fb9f24cdb2c44ac3aa9147429a13, type: 3}
+    amountOfSpawn: 5
   - name: GateKeepers
     spawnArea:
     - {fileID: 232290909}
     Enemies:
     - {fileID: 6475514327369348805, guid: 78230d655d22cf74c8f42e9ff7f72837, type: 3}
-    amountOfSpawn: 6
+    - {fileID: 3877234488986251424, guid: 9fd6fb9f24cdb2c44ac3aa9147429a13, type: 3}
+    amountOfSpawn: 8
   allEnemyList: []
-  bossTrigerCollider: {fileID: 0}
+  bossTrigerCollider: {fileID: 56541817}
 --- !u!1 &1439557392
 GameObject:
   m_ObjectHideFlags: 0

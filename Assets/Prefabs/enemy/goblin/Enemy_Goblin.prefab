@@ -1679,7 +1679,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1012057833202417472
 Transform:
   m_ObjectHideFlags: 0
@@ -1769,6 +1769,7 @@ MonoBehaviour:
   xpAssetPrefab: {fileID: 6350982004921644942, guid: 0f0f92c644e20f94589dfe066b480d21,
     type: 3}
   xpGave: 10
+  isEnemyABoss: 0
 --- !u!136 &3707874234084129845
 CapsuleCollider:
   m_ObjectHideFlags: 0
