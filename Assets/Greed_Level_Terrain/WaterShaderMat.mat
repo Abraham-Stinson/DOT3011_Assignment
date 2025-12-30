@@ -133,7 +133,7 @@ Material:
     - _SrcBlend: 1
     - _Surface: 0
     - _UVSec: 0
-    - _WaveHeight: 0.04
+    - _WaveHeight: 0.01
     - _WaveSpread: 5
     - _WorkflowMode: 1
     - _ZTest: 4

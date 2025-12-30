@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -95,10 +96,7 @@ public class GameManager : MonoBehaviour
 
     public void ToMainMenu()
     {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        RemoveCurrentPlayer();
-        SetGameState(EGameState.MAINMENU);
+        SceneManager.LoadScene("MainMenu");
     }
     public void CharacterSelection()
     {

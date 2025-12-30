@@ -72,6 +72,9 @@ public class SkillTreeManager : MonoBehaviour
 
     public int skillPoints;
 
+    public static System.Action<string> OnUpgradeUnlocked;
+
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -92,7 +95,6 @@ public class SkillTreeManager : MonoBehaviour
             flashlightStatsRuntime = WeaponStatsManager.Instance.flashlightStatsRuntime;
             nightStickStatsRuntime = WeaponStatsManager.Instance.nightStickStatsRuntime;
         }
-        flashlightStatsRuntime = WeaponStatsManager.Instance.flashlightStatsRuntime;
 
         upgradeActions = new Dictionary<string, System.Action>()
         {
@@ -126,6 +128,19 @@ public class SkillTreeManager : MonoBehaviour
             { "WideUpgrade_02", 1 },
             { "WideUpgrade_03", 2 },
             { "WideUpgrade_04", 1 },
+            { "WideUpgrade_05", 2 },
+            { "WideUpgrade_06", 2 },
+            { "WideUpgrade_07", 3 },
+            { "WideUpgrade_08", 1 },
+
+            { "BombUpgrade_01", 1 },
+            { "BombUpgrade_02", 1 },
+            { "BombUpgrade_03", 2 },
+            { "BombUpgrade_04", 1 },
+            { "BombUpgrade_05", 2 },
+            { "BombUpgrade_06", 1 },
+            { "BombUpgrade_07", 1 },
+            { "BombUpgrade_08", 1 },
 
 
             { "StickUpgrade_Damage", 1 },
@@ -134,7 +149,6 @@ public class SkillTreeManager : MonoBehaviour
 
         foreach (string code in flashlightUpgrades) LoadUpgrade(code);
         foreach (string code in nightStickUpgrades) LoadUpgrade(code);
-
 
         UpdateSkillTreeUI();
 
@@ -204,6 +218,8 @@ public class SkillTreeManager : MonoBehaviour
         ApplyUpgrade(upgradeName);
 
         SaveUpgrade(upgradeName);
+
+        OnUpgradeUnlocked?.Invoke(upgradeName);
 
         Debug.Log(
             $"Unlocked {upgradeName} for {cost} points. " +

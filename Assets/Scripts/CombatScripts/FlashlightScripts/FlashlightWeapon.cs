@@ -10,13 +10,13 @@ public class FlashlightWeapon : WeaponBase
     [SerializeField] private LightBeamShooter wideShooter;
     [SerializeField] private LightBombShooter bombShooter;
     [SerializeField] private LightUltimateShooter ultimateShooter;
-    
+
     [Header("Input System")]
     [SerializeField] private InputActionReference secondaryAttackInput;
 
     [Header("Aiming Settings")]
-    [SerializeField] private Transform firePoint; // ASSIGN THIS: The tip of the flashlight mesh
-    [SerializeField] private LayerMask aimLayerMask; // Layers the crosshair can hit (Default, Ground, Enemy)
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private LayerMask aimLayerMask;
     [SerializeField] private float maxAimDistance = 100f;
 
     private Camera cam;
@@ -27,6 +27,17 @@ public class FlashlightWeapon : WeaponBase
     private void Start()
     {
         cam = Camera.main;
+
+        if (PlayerPrefs.GetString("SelectedAbility") == "WideBeam")
+        {
+            wideShooter.gameObject.SetActive(true);
+            bombShooter.gameObject.SetActive(false);
+        }
+        else if (PlayerPrefs.GetString("SelectedAbility") == "LightBomb")
+        {
+            wideShooter.gameObject.SetActive(false);
+            bombShooter.gameObject.SetActive(true);
+        }
     }
 
     private void OnEnable()

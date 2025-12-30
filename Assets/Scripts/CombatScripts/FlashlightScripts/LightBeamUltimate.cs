@@ -59,6 +59,7 @@ public class LightBeamUltimate : MonoBehaviour
     private Transform firePoint;
     private bool isLaserActive = false;
     private float playerBaseSpeed;
+    private bool canDealDamage = false;
 
     #region Unity Methods
 
@@ -131,6 +132,8 @@ public class LightBeamUltimate : MonoBehaviour
         laserLine.startWidth = thinWidth;
         laserLine.endWidth = thinWidth;
 
+        canDealDamage = false;
+
         if (freeLookCam != null)
         {
             baseXSpeed = freeLookCam.m_XAxis.m_MaxSpeed;
@@ -172,6 +175,8 @@ public class LightBeamUltimate : MonoBehaviour
 
         laserLine.startWidth = fullWidth;
         laserLine.endWidth = fullWidth * 0.85f;
+
+        canDealDamage = true;
     }
 
 
@@ -194,6 +199,8 @@ public class LightBeamUltimate : MonoBehaviour
         laserLine.SetPosition(1, endPoint);
 
         // 3. Piercing damage (RaycastAll)
+        if (!canDealDamage) return;
+
         damageTimer += Time.deltaTime;
 
         if (damageTimer >= damageTick)

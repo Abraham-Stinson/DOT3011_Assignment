@@ -26,7 +26,7 @@ public class WeaponStatsManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
 
-        if (flashlightStatsRuntime != null)
+        if (flashlightStatsBase != null)
         {
             flashlightStatsRuntime = Instantiate(flashlightStatsBase);
         }

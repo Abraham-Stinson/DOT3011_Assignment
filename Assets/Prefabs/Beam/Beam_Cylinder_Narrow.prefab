@@ -96,13 +96,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe9f43376ff405047862c11caa0379e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statsRuntime: {fileID: 0}
   beamType: 0
   hitLayers:
     serializedVersion: 2
-    m_Bits: 200
+    m_Bits: 201
   expansionAxes: {x: 1, y: 1, z: 0}
-  expansionMultiplier: 1.5
   scaleCurve:
     serializedVersion: 2
     m_Curve:
