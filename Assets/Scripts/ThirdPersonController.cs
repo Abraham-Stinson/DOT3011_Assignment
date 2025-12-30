@@ -24,6 +24,11 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float rotationSmoothTime = 0.5f;
     private float rotationVelocity;
 
+    [Header("Sprint")]
+    [SerializeField] private float sprintMultiplier = 1.6f;
+    private bool isSprinting;
+    private float baseSpeed;
+
     [Header("Jump and Gravity")]
     [SerializeField, Range(-100f, 100f)] private float gravity = -9.81f;
     [SerializeField, Range(0f, 50f)] private float jumpForce = 5f;
@@ -48,6 +53,8 @@ public class ThirdPersonController : MonoBehaviour
         playerInputActions.Player.MenuTrigger.performed += MenuToggle;
         playerInputActions.Player.MainAttack.performed += MainAttack;
         playerInputActions.Player.SecondaryAttack.performed += SecondaryAttack;
+        playerInputActions.Player.Sprint.started += SprintStart;
+        playerInputActions.Player.Sprint.canceled += SprintEnd;
 
         instance = this;
     }
@@ -112,14 +119,41 @@ public class ThirdPersonController : MonoBehaviour
                 
                 Vector3 moveDir = cam.forward * direction.z + cam.right * direction.x;
                 moveDir.y = 0; // Yükseklik değişimini engelle
-                
-                characterController.Move(moveDir.normalized * speed * Time.deltaTime);
+
+
+
+                float finalSpeed = speed;
+
+                if (isSprinting && direction.magnitude >= 0.1f)
+                {
+                    finalSpeed *= sprintMultiplier;
+                }
+
+                characterController.Move(moveDir.normalized * finalSpeed * Time.deltaTime);
             }
         }
         else
         {
             if (animator != null) animator.SetBool("isMoving", false);
         }
+    }
+
+    private void SprintStart(InputAction.CallbackContext context)
+    {
+        if (isAttacking) return;
+
+        isSprinting = true;
+
+        if (animator != null)
+            animator.SetBool("isSprinting", true);
+    }
+
+    private void SprintEnd(InputAction.CallbackContext context)
+    {
+        isSprinting = false;
+
+        if (animator != null)
+            animator.SetBool("isSprinting", false);
     }
 
     // Shooter modu için karakteri zorla kameranın baktığı yöne döndürür
