@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5428157553210511331}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: vfx_Beam_Hit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 4116192724533280750}
   - component: {fileID: 9001174236634545290}
   - component: {fileID: 7142624772967204321}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Beam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4934,7 +4934,7 @@ GameObject:
   - component: {fileID: 2322291934648912869}
   - component: {fileID: 6093461644581435710}
   - component: {fileID: 4248587579911977148}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Shiny
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9822,7 +9822,7 @@ GameObject:
   - component: {fileID: 5975561122918938021}
   - component: {fileID: 1832622947245100865}
   - component: {fileID: 6357748219261050477}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14710,7 +14710,7 @@ GameObject:
   - component: {fileID: 3045707009956428871}
   - component: {fileID: 462516387824117990}
   - component: {fileID: 5292936801210562583}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}

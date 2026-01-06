@@ -1,7 +1,8 @@
 using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UIButtonHighlight : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class UIButtonHighlight : MonoBehaviour
     private RectTransform rect;
     private Coroutine fillRoutine;
 
-    private bool isHighlighted=false;
+    private bool isHighlighted = false;
 
     private void Awake()
     {
@@ -68,7 +69,7 @@ public class UIButtonHighlight : MonoBehaviour
 
         while (t < fillTime)
         {
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             fillImage.fillAmount = Mathf.Lerp(start, target, t / fillTime);
             yield return null;
         }
@@ -82,7 +83,7 @@ public class UIButtonHighlight : MonoBehaviour
         rect.localScale = Vector3.Lerp(
             rect.localScale,
             Vector3.one * targetScale,
-            Time.deltaTime * scaleSpeed
+            Time.unscaledDeltaTime * scaleSpeed
         );
     }
 }

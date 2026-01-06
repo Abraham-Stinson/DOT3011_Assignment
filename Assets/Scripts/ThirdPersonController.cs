@@ -38,6 +38,7 @@ public class ThirdPersonController : MonoBehaviour
     [Header("Interact")]
     [SerializeField, Range(0f, 100f)] private float camRange = 20f;
     [SerializeField, Range(0f, 100f)] private float camStartOffset = 1f;
+    [SerializeField] private GameObject interactionIndicator;
 
     [Header("Input & Animation")]
     public PlayerInputActions playerInputActions;
@@ -47,7 +48,7 @@ public class ThirdPersonController : MonoBehaviour
     void Awake()
     {
         playerInputActions = new PlayerInputActions();
-        
+
         playerInputActions.Player.Jump.performed += JumpHandle;
         playerInputActions.Player.Interact.performed += InteractHandle;
         playerInputActions.Player.MenuTrigger.performed += MenuToggle;
@@ -72,12 +73,14 @@ public class ThirdPersonController : MonoBehaviour
     void Update()
     {
         ApplyGravity();
-        
+
         // Shooter modundaysak karakter hareket etmese bile kameranın baktığı yere dönsün
         if (currentCameraStyle == CameraStyle.Shooter)
         {
             RotatePlayerToCameraForward();
         }
+
+        CheckInteractable();
     }
 
     void FixedUpdate()
@@ -93,7 +96,7 @@ public class ThirdPersonController : MonoBehaviour
 
         Vector2 movementInput = playerInputActions.Player.Movement.ReadValue<Vector2>();
         Vector3 direction = new Vector3(movementInput.x, 0f, movementInput.y).normalized;
-        
+
         // Eğer hareket girdisi varsa
         if (direction.magnitude >= 0.1f)
         {
@@ -105,7 +108,7 @@ public class ThirdPersonController : MonoBehaviour
                 // Karakteri hareket ettiği yöne döndür (Örn: S'ye basınca arkasını döner)
                 float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
                 float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref rotationVelocity, rotationSmoothTime);
-                
+
                 transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
                 Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
@@ -116,7 +119,7 @@ public class ThirdPersonController : MonoBehaviour
             {
                 // Karakterin yönünü zaten Update içinde RotatePlayerToCameraForward ile kilitledik.
                 // Burada sadece sağa/sola/ileri/geri yürümesini sağlıyoruz (Dönmeden).
-                
+
                 Vector3 moveDir = cam.forward * direction.z + cam.right * direction.x;
                 moveDir.y = 0; // Yükseklik değişimini engelle
 
@@ -161,7 +164,7 @@ public class ThirdPersonController : MonoBehaviour
     {
         Vector3 camForward = cam.forward;
         camForward.y = 0f;
-        
+
         if (camForward.sqrMagnitude < 0.001f) return;
 
         Quaternion targetRotation = Quaternion.LookRotation(camForward);
@@ -226,6 +229,24 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
 
+    void CheckInteractable()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(GetRayStartOrgin(), cam.forward, out hit, camRange))
+        {
+            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+
+            interactionIndicator.SetActive(interactable != null);
+        }
+        else
+        {
+            // IMPORTANT: turn it off when raycast hits nothing
+            interactionIndicator.SetActive(false);
+        }
+    }
+
+
     private Vector3 GetRayStartOrgin()
     {
         return cam.position + (cam.forward * camStartOffset);
@@ -258,7 +279,7 @@ public class ThirdPersonController : MonoBehaviour
             if (onHand != null) onHand.SecondaryAttack();
         }
     }
-    
+
     public void UltimateAttack(InputAction.CallbackContext context)
     {
         if (context.performed)

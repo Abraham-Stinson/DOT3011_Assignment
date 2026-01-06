@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     {
         /*Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;*/
-        SetGameState(EGameState.MAINMENU);
+        SetGameState(EGameState.CHARACTERSELECTION);
         freeLookCamera = GameObject.Find("FreeLook Camera");
 
         ActiveControl(false);
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
     }
     public void CharacterSelection()
     {
-        SetGameState(EGameState.CHRACTERSELECTION);
+        SetGameState(EGameState.CHARACTERSELECTION);
     }
     public void InGame(int selectedCharacterIndex)
     {

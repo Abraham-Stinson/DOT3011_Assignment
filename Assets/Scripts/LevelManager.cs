@@ -1,13 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Cinemachine;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.XR;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
@@ -178,6 +176,8 @@ public class LevelManager : MonoBehaviour
     }
 
 }
+#if UNITY_EDITOR
+
 
 [CustomEditor(typeof(LevelManager))]
 public class LevelManagerEditor : Editor
@@ -200,3 +200,4 @@ public class LevelManagerEditor : Editor
         }
     }
 }
+#endif

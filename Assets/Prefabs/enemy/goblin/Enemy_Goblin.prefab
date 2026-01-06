@@ -1768,7 +1768,8 @@ MonoBehaviour:
   stunTime: 1
   xpAssetPrefab: {fileID: 6350982004921644942, guid: 0f0f92c644e20f94589dfe066b480d21,
     type: 3}
-  xpGave: 10
+  xpGave: 20
+  isEnemyABoss: 0
 --- !u!136 &3707874234084129845
 CapsuleCollider:
   m_ObjectHideFlags: 0

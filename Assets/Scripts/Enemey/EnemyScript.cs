@@ -1,12 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
-using Cinemachine;
-using Microsoft.Unity.VisualStudio.Editor;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
@@ -87,6 +81,8 @@ public class EnemyScript : MonoBehaviour, IDamageable
     [Header("Xp Gave")]
     [SerializeField] private GameObject xpAssetPrefab;
     [SerializeField, Range(0.1f, 100f)] private float xpGave = 10f;
+
+    [SerializeField] private bool isEnemyABoss;
     void Awake()
     {
         animator = GetComponent<Animator>();
@@ -353,6 +349,10 @@ public class EnemyScript : MonoBehaviour, IDamageable
             healthBar.SetActive(false);
         }
         animator.SetTrigger("death");
+        if (isEnemyABoss)
+        {
+            ReturnLevel();
+        }
     }
     public void DestroyEnemy()
     {
@@ -500,5 +500,12 @@ public class EnemyScript : MonoBehaviour, IDamageable
         // Eğer bulunamazsa hata vermemesi için varsayılan bir değer ata
         Debug.LogWarning(gameObject.name + ": 'Stun' isminde bir animasyon klibi bulunamadı!");
         stunClipDuration = 1f;
+    }
+
+    public void ReturnLevel()
+    {
+        LevelManager.instance.ReturnFromLevel();
+        LevelManager.instance.DestroyCurrentLevel();
+        LevelManager.instance.ReturnWithWinFromLevel();
     }
 }

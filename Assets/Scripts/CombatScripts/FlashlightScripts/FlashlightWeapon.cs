@@ -22,26 +22,21 @@ public class FlashlightWeapon : WeaponBase
     private Camera cam;
     private bool isHoldingBomb = false;
 
+    private const string AbilityKey = "SelectedAbility";
+
 
 
     private void Start()
     {
         cam = Camera.main;
 
-        if (PlayerPrefs.GetString("SelectedAbility") == "WideBeam")
-        {
-            wideShooter.gameObject.SetActive(true);
-            bombShooter.gameObject.SetActive(false);
-        }
-        else if (PlayerPrefs.GetString("SelectedAbility") == "LightBomb")
-        {
-            wideShooter.gameObject.SetActive(false);
-            bombShooter.gameObject.SetActive(true);
-        }
+        ApplySelectedAbility();
     }
 
     private void OnEnable()
     {
+        UI_AbilityButton.OnAbilitySelected += ApplySelectedAbility;
+
         // Subscribe to Input Events
         if (secondaryAttackInput != null)
         {
@@ -54,6 +49,7 @@ public class FlashlightWeapon : WeaponBase
 
     private void OnDisable()
     {
+        UI_AbilityButton.OnAbilitySelected -= ApplySelectedAbility;
         // Unsubscribe to prevent memory leaks
         if (secondaryAttackInput != null)
         {
@@ -72,6 +68,29 @@ public class FlashlightWeapon : WeaponBase
             Vector3 aimDir = GetAimDirection();
             bombShooter.PredictTrajectory(firePoint.position, aimDir);
             bombShooter.IsOnCooldown();
+        }
+    }
+
+    private void ApplySelectedAbility()
+    {
+        string ability = PlayerPrefs.GetString(AbilityKey);
+
+        // Disable everything first
+        narrowShooter.gameObject.SetActive(true); // always available
+        wideShooter.gameObject.SetActive(false);
+        bombShooter.gameObject.SetActive(false);
+
+        isHoldingBomb = false;
+
+        switch (ability)
+        {
+            case "WideBeam":
+                wideShooter.gameObject.SetActive(true);
+                break;
+
+            case "LightBomb":
+                bombShooter.gameObject.SetActive(true);
+                break;
         }
     }
 
@@ -127,9 +146,9 @@ public class FlashlightWeapon : WeaponBase
 
     public override void SecondaryAttack()
     {
-        if(wideShooter.gameObject.activeSelf)
+        if (wideShooter.gameObject.activeSelf)
             wideShooter.Shoot(firePoint.position, GetAimDirection());
-            
+
     }
 
     public override void UltimateAttack()

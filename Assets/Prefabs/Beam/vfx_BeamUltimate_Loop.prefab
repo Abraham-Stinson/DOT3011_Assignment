@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1256989545198093917}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: vfx_BeamUltimate_Loop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 7257373512225061355}
   - component: {fileID: 6656126862612683091}
   - component: {fileID: 8640652735092831062}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Shiny
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4873,7 +4873,7 @@ GameObject:
   - component: {fileID: 6877038558758984888}
   - component: {fileID: 3152659687792712994}
   - component: {fileID: 723778424383174337}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9703,7 +9703,7 @@ GameObject:
   - component: {fileID: 5367144394043642143}
   - component: {fileID: 8984942235073641685}
   - component: {fileID: 6733444792816638277}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Beam
   m_TagString: Untagged
   m_Icon: {fileID: 0}

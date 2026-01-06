@@ -33,7 +33,7 @@ public class UpgradeDescriptionManager : MonoBehaviour
 
     IEnumerator ShowWithDelay()
     {
-        yield return new WaitForSeconds(hoverDelay);
+        yield return new WaitForSecondsRealtime(hoverDelay);
 
         if (pendingButton == null)
             yield break;

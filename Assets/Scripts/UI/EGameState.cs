@@ -6,7 +6,7 @@ public enum EGameState
 {
     MAINMENU = 0,
     GAMEINTRO = 1,
-    CHRACTERSELECTION = 2,
+    CHARACTERSELECTION = 2,
     INGAME = 3,
     INSKILLTREE = 4,
     PAUSE = 5,
